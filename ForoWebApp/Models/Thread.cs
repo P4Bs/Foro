@@ -29,6 +29,6 @@ namespace ForoWebApp.Models
 		public bool IsClosed { get; set; }
 
 		[BsonElement("closureDate")]
-		public DateTime ClosureDate { get; set; }
+		public DateTime? ClosureDate { get; set; }
 	}
 }

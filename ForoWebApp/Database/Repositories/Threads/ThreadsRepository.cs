@@ -5,9 +5,10 @@ namespace ForoWebApp.Database.Repositories.Threads
 {
 	public class ThreadsRepository(DbContext context) : BaseRepository<Thread>(context, "Threads"), IThreadsRepository
 	{
-		public async Task InsertOneAsync(Thread entity)
+		public async Task<int> InsertOneAsync(Thread thread)
 		{
-			await Collection.InsertOneAsync(entity);
+			await Collection.InsertOneAsync(thread);
+			return thread.Id;
 		}
 
 		public async Task<IAsyncCursor<Thread>> FindAllByThemeIdAsync(int themeId)

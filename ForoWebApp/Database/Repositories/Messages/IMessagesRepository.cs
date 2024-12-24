@@ -5,7 +5,7 @@ namespace ForoWebApp.Database.Repositories.Messages
 {
 	public interface IMessagesRepository
 	{
-		Task InsertOneAsync(Message message);
+		Task<int> InsertOneAsync(Message message);
 
 		Task<IAsyncCursor<Message>> FindAllByThreadIdAsync(int threadId);
 
