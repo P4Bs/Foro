@@ -5,7 +5,7 @@ namespace ForoWebApp.Database.Repositories.Threads
 {
 	public interface IThreadsRepository
 	{
-		Task InsertOneAsync(Thread entity);
+		Task<int> InsertOneAsync(Thread thread);
 
 		Task<IAsyncCursor<Thread>> FindAllByThemeIdAsync(int themeId);
 

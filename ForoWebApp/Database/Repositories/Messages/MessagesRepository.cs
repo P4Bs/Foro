@@ -5,9 +5,10 @@ namespace ForoWebApp.Database.Repositories.Messages
 {
 	public class MessagesRepository(DbContext context) : BaseRepository<Message>(context, "Messages"), IMessagesRepository
 	{
-		public async Task InsertOneAsync(Message message)
+		public async Task<int> InsertOneAsync(Message message)
 		{
 			await Collection.InsertOneAsync(message);
+			return message.Id;
 		}
 
 		public async Task<IAsyncCursor<Message>> FindAllByThreadIdAsync(int threadId)

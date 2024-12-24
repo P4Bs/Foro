@@ -12,6 +12,7 @@ namespace ForoWebApp.Database.Repositories.Themes
 
 		public async Task<IAsyncCursor<Theme>> FindAllAsync()
 		{
+			//TODO: EDITAR ESTO PARA AGRUPAR POR CATEGORIAS
 			return await Collection.FindAsync(_ => true);
 		}
 
