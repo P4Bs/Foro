@@ -1,25 +1,24 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace ForoWebApp.Database.Documents
+namespace ForoWebApp.Database.Documents;
+
+public class Theme : IDocument
 {
-	public class Theme
-	{
-		[BsonId]
-		[BsonRepresentation(BsonType.ObjectId)]
-		public int Id { get; set; }
+	[BsonId]
+	[BsonRepresentation(BsonType.ObjectId)]
+	public int Id { get; set; }
 
-		[BsonElement("categoryId")]
-		[BsonRepresentation(BsonType.ObjectId)]
-		public int CategoryId { get; set; }
+	[BsonElement("categoryId")]
+	[BsonRepresentation(BsonType.ObjectId)]
+	public int CategoryId { get; set; }
 
-		[BsonElement("name")]
-		public string? Name { get; set; }
+	[BsonElement("name")]
+	public string Name { get; set; }
 
-		[BsonElement("description")]
-		public string? Description { get; set; }
+	[BsonElement("description")]
+	public string? Description { get; set; }
 
-		[BsonElement("createdAt")]
-		public DateTime CreatedAt { get; set; }
-	}
+	[BsonElement("createdAt")]
+	public DateTime CreatedAt { get; set; }
 }

@@ -1,3 +1,4 @@
+using ForoWebApp.Database;
 using ForoWebApp.Models.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -9,11 +10,8 @@ builder.Services.AddControllersWithViews();
 
 #region Mongo Database Configuration
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
-{
-	var dbSettings = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value;
-	return new MongoClient(dbSettings.ConnectionString);
-});
+builder.Services.AddScoped<DbContext>();
+builder.Services.AddScoped<UnitOfWork>();
 #endregion
 
 #region Entity Repositories Registration
