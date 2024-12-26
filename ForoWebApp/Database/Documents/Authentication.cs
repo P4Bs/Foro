@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using ForoWebApp.Database.Enums;
 
-namespace ForoWebApp.Models
+namespace ForoWebApp.Database.Documents
 {
 	public class Authentication
 	{

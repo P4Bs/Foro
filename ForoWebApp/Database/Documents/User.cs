@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using ForoWebApp.Database.Enums;
 
-namespace ForoWebApp.Models
+namespace ForoWebApp.Database.Documents
 {
 	public class User
 	{
@@ -20,5 +21,8 @@ namespace ForoWebApp.Models
 
 		[BsonElement("profilePicture")]
 		public byte[]? ProfilePicture { get; set; }
+
+		[BsonElement("userRole")]
+		public UserRole Role { get; set; }
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace ForoWebApp.Models
+namespace ForoWebApp.Database.Documents
 {
 	public class Thread
 	{

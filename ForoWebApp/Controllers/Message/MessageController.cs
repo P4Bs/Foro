@@ -20,7 +20,7 @@ namespace ForoWebApp.Controllers.Message
 		[HttpPost]
 		public async Task<IActionResult> PublishMessageInThread([FromBody] CreateMessageData messageData)
 		{
-			Models.Message newMessage = new()
+			Database.Documents.Message newMessage = new()
 			{
 				ThreadId = messageData.ThreadId,
 				UserId = messageData.UserId,

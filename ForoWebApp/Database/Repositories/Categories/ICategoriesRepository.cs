@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Models;
+﻿using ForoWebApp.Database.Documents;
 using MongoDB.Driver;
 
 namespace ForoWebApp.Database.Repositories.Categories
