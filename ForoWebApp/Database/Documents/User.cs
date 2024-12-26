@@ -2,27 +2,29 @@
 using MongoDB.Bson;
 using ForoWebApp.Database.Enums;
 
-namespace ForoWebApp.Database.Documents
+namespace ForoWebApp.Database.Documents;
+
+public class User : IDocument
 {
-	public class User
-	{
-		[BsonId]
-		[BsonRepresentation(BsonType.ObjectId)]
-		public int Id { get; set; }
+	[BsonId]
+	[BsonRepresentation(BsonType.ObjectId)]
+	public int Id { get; set; }
 
-		[BsonElement("name")]
-		public string? Name { get; set; }
+	[BsonElement("name")]
+	public string Name { get; set; }
 
-		[BsonElement("email")]
-		public string? Email { get; set; }
+	[BsonElement("email")]
+	public string Email { get; set; }
 
-		[BsonElement("registeredAt")]
-		public DateOnly RegisteredAt { get; set; }
+    [BsonElement("password")]
+    public string Password { get; set; }
 
-		[BsonElement("profilePicture")]
-		public byte[]? ProfilePicture { get; set; }
+    [BsonElement("registeredAt")]
+	public DateOnly RegisteredAt { get; set; }
 
-		[BsonElement("userRole")]
-		public UserRole Role { get; set; }
-	}
+	[BsonElement("profilePicture")]
+	public byte[]? ProfilePicture { get; set; }
+
+	[BsonElement("userRole")]
+	public UserRole Role { get; set; }
 }

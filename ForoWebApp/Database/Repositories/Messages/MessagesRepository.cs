@@ -1,12 +1,14 @@
 ﻿using ForoWebApp.Database.Documents;
-using ForoWebApp.Models.ViewModels;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace ForoWebApp.Database.Repositories.Messages;
 
-public class MessagesRepository : IMessagesRepository
+public class MessagesRepository : GenericRepository<Message>
 {
+    public MessagesRepository(DbContext dbContext) : base(dbContext.Messages)
+    {
+    }
+
+    /*
 	private readonly UnitOfWork _unitOfWork;
 
 	public async Task<int> InsertOneAsync(Message message)
@@ -62,5 +64,6 @@ public class MessagesRepository : IMessagesRepository
 		var deleteResult = await _unitOfWork.MessagesCollection.DeleteOneAsync(message => messageId == message.Id);
 
 		return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
-	}
+	}*/
+
 }
