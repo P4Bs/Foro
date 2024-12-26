@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace ForoWebApp.Models
+namespace ForoWebApp.Database.Documents
 {
 	public class Message
 	{

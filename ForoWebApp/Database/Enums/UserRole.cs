@@ -1,4 +1,4 @@
-﻿namespace ForoWebApp.Models
+﻿namespace ForoWebApp.Database.Enums
 {
 	public enum UserRole
 	{

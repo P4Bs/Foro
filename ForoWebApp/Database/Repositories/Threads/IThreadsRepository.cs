@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using Thread = ForoWebApp.Models.Thread;
+using Thread = ForoWebApp.Database.Documents.Thread;
 
 namespace ForoWebApp.Database.Repositories.Threads
 {

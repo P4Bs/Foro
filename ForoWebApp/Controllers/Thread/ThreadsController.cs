@@ -20,7 +20,7 @@ namespace ForoWebApp.Controllers.Thread
 		[HttpPost]
 		public async Task<IActionResult> CreateNewThread([FromBody] CreateThreadData threadData)
 		{
-			Models.Thread newThread = new()
+			Database.Documents.Thread newThread = new()
 			{
 				ThemeId = threadData.ThemeId,
 				Title = threadData.Title,

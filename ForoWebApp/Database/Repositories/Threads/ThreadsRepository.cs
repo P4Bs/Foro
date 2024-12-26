@@ -1,29 +1,33 @@
 ﻿using MongoDB.Driver;
-using Thread = ForoWebApp.Models.Thread;
+using Thread = ForoWebApp.Database.Documents.Thread;
 
 namespace ForoWebApp.Database.Repositories.Threads
 {
-	public class ThreadsRepository(DbContext context) : BaseRepository<Thread>(context, "Threads"), IThreadsRepository
+	public class ThreadsRepository : IThreadsRepository
 	{
+#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
+		private readonly UnitOfWork _unitOfWork;
+#pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de agregar el modificador "required" o declararlo como un valor que acepta valores NULL.
+
 		public async Task<int> InsertOneAsync(Thread thread)
 		{
-			await Collection.InsertOneAsync(thread);
+			await _unitOfWork.ThreadsCollection.InsertOneAsync(thread);
 			return thread.Id;
 		}
 
 		public async Task<IAsyncCursor<Thread>> FindAllByThemeIdAsync(int themeId)
 		{
-			return await Collection.FindAsync(thread => thread.ThemeId == themeId && thread.IsClosed == false);
+			return await _unitOfWork.ThreadsCollection.FindAsync(thread => thread.ThemeId == themeId && thread.IsClosed == false);
 		}
 
 		public async Task<Thread> FindByIdAsync(int threadId)
 		{
-			return await Collection.FindAsync(thread => thread.Id == threadId && thread.IsClosed == false).Result.FirstOrDefaultAsync();
+			return await _unitOfWork.ThreadsCollection.FindAsync(thread => thread.Id == threadId && thread.IsClosed == false).Result.FirstOrDefaultAsync();
 		}
 
 		public async Task CloseThreadById(int threadId, UpdateDefinition<Thread>[] closureUpdates)
 		{
-			await Collection.UpdateOneAsync(
+			await _unitOfWork.ThreadsCollection.UpdateOneAsync(
 				filter: thread => thread.Id == threadId,
 				update: Builders<Thread>.Update.Combine(closureUpdates)
 			);
