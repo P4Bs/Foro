@@ -1,7 +1,5 @@
 using ForoWebApp.Database;
 using ForoWebApp.Models.Settings;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 

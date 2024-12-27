@@ -1,13 +1,9 @@
-﻿using MongoDB.Driver;
-using Thread = ForoWebApp.Database.Documents.Thread;
+﻿using ForumThread = ForoWebApp.Database.Documents.ForumThread;
 
 namespace ForoWebApp.Database.Repositories.Threads;
 
-public class ThreadsRepository : GenericRepository<Thread>
+public class ThreadsRepository(DbContext dbContext) : GenericRepository<ForumThread>(dbContext.Threads)
 {
-    public ThreadsRepository(IMongoCollection<Thread> collection) : base(collection)
-    {
-    }
 
     /*
 	public async Task<int> InsertOneAsync(Thread thread)

@@ -7,11 +7,7 @@ public class Theme : IDocument
 {
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int Id { get; set; }
-
-	[BsonElement("categoryId")]
-	[BsonRepresentation(BsonType.ObjectId)]
-	public int CategoryId { get; set; }
+	public string Id { get; set; }
 
 	[BsonElement("name")]
 	public string Name { get; set; }

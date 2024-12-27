@@ -7,15 +7,15 @@ public class Message : IDocument
 {
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int Id { get; set; }
+	public string Id { get; set; }
 
 	[BsonElement("threadId")]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int ThreadId { get; set; }
+	public string ThreadId { get; set; }
 
 	[BsonElement("userId")]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int UserId { get; set; }
+	public string UserId { get; set; }
 
 	[BsonElement("content")]
 	public string Content { get; set; }
