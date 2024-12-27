@@ -1,5 +1,6 @@
 using ForoWebApp.Database;
 using ForoWebApp.Models.Settings;
+using ForoWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddScoped<UnitOfWork>();
 
 #region Entity Repositories Registration
 //TODO: REGISTRATE REPOSITORIES
-//builder.Services.AddScoped();
+builder.Services.AddScoped<ThemeService>();
 
 #endregion
 

@@ -2,7 +2,7 @@
 {
 	public class DbSettings
 	{
-		public readonly string? ConnectionString;
-		public readonly string? DatabaseName;
+		public string ConnectionString { get; set; } = string.Empty;
+		public string DatabaseName { get; set; } = string.Empty;
 	}
 }

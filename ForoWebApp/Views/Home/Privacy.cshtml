@@ -1,6 +1,13 @@
-﻿@{
+﻿@model IList<Theme>
+@{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@foreach (var tema in Model)
+{
+    <li>@tema.Id</li>
+    <li>@tema.Name</li>
+    <li>@tema.Description</li>
+    <li>@tema.CreatedAt</li>
+}

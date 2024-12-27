@@ -1,26 +1,24 @@
 using System.Diagnostics;
 using ForoWebApp.Models;
+using ForoWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger, ThemeService themeService) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<HomeController> _logger = logger;
+        private readonly ThemeService _themeService = themeService;
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            return View();
+            var temas = await _themeService.GetThemes();
+            return View(temas);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
