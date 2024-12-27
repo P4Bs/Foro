@@ -1,4 +1,4 @@
-﻿using ForumThread = ForoWebApp.Database.Documents.ForumThread;
+﻿using ForoWebApp.Database.Documents;
 
 namespace ForoWebApp.Database.Repositories.Threads;
 

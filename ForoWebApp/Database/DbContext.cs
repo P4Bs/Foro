@@ -2,7 +2,6 @@
 using ForoWebApp.Models.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using ForumThread = ForoWebApp.Database.Documents.ForumThread;
 
 namespace ForoWebApp.Database;
 
@@ -14,10 +13,10 @@ public class DbContext
     private IMongoCollection<ForumThread> _threads;
     private IMongoCollection<User> _users;
 
-    public IMongoCollection<Message> Messages => _messages ??= GetCollection<Message>("messages");
-    public IMongoCollection<Theme> Themes => _themes ??= GetCollection<Theme>("themes");
-    public IMongoCollection<ForumThread> Threads => _threads ??= GetCollection<ForumThread>("threads");
-    public IMongoCollection<User> Users => _users ??= GetCollection<User>("users");
+    public IMongoCollection<Message> Messages => _messages ??= GetCollection<Message>("message");
+    public IMongoCollection<Theme> Themes => _themes ??= GetCollection<Theme>("theme");
+    public IMongoCollection<ForumThread> Threads => _threads ??= GetCollection<ForumThread>("thread");
+    public IMongoCollection<User> Users => _users ??= GetCollection<User>("user");
 
     public DbContext(IOptionsMonitor<DbSettings> options)
 	{
