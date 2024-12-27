@@ -3,15 +3,15 @@ using MongoDB.Bson;
 
 namespace ForoWebApp.Database.Documents;
 
-public class Thread : IDocument
+public class ForumThread : IDocument
 {
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int Id { get; set; }
+	public string Id { get; set; }
 
 	[BsonElement("themeId")]
 	[BsonRepresentation(BsonType.ObjectId)]
-	public int ThemeId { get; set; }
+	public string ThemeId { get; set; }
 
 	[BsonElement("title")]
 	public string Title { get; set; }

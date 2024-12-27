@@ -2,7 +2,7 @@
 {
 	public class CreateThreadData
 	{
-		public int ThemeId { get; set; }
+		public string ThemeId { get; set; }
 		public string? Title { get; set; }
 	}
 }

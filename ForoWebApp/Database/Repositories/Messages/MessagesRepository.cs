@@ -2,13 +2,10 @@
 
 namespace ForoWebApp.Database.Repositories.Messages;
 
-public class MessagesRepository : GenericRepository<Message>
+public class MessagesRepository(DbContext dbContext) : GenericRepository<Message>(dbContext.Messages)
 {
-    public MessagesRepository(DbContext dbContext) : base(dbContext.Messages)
-    {
-    }
 
-    /*
+	/*
 	private readonly UnitOfWork _unitOfWork;
 
 	public async Task<int> InsertOneAsync(Message message)

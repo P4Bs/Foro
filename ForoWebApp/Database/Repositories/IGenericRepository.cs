@@ -1,20 +1,19 @@
 ﻿using ForoWebApp.Database.Documents;
+using MongoDB.Driver;
 
 namespace ForoWebApp.Database.Repositories;
 
 public interface IGenericRepository<TDocument> where TDocument : IDocument
 {
-    IQueryable<TDocument> AsQueryable();
+    IQueryable<TDocument> GetCollectionAsQueryable();
 
     Task<List<TDocument>> GetAllAsync();
 
-    Task<TDocument> GetByIdAsync(int id);
+    Task<TDocument> GetByIdAsync(string id);
 
-    Task<TDocument> InsertAsync(TDocument document);
+    Task<string> InsertAsync(TDocument document);
 
-    Task<TDocument> UpdateAsync(TDocument id);
+    Task UpdateAsync(string id, UpdateDefinition<TDocument>[] document);
 
-    Task DeleteAsync(int id);
-
-    Task<bool> ExistsAsync(int id);
+    Task DeleteAsync(string id);
 }
