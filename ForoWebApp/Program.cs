@@ -16,6 +16,7 @@ builder.Services.AddScoped<UnitOfWork>();
 #region Entity Repositories Registration
 //TODO: REGISTRATE REPOSITORIES
 builder.Services.AddScoped<ThemeService>();
+builder.Services.AddScoped<ThreadService>();
 
 #endregion
 
@@ -41,6 +42,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
 
 app.MapControllers();
 

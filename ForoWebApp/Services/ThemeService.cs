@@ -1,5 +1,7 @@
 ﻿using ForoWebApp.Database;
 using ForoWebApp.Database.Documents;
+using ForoWebApp.Models.ViewModels;
+using MongoDB.Driver.Linq;
 
 namespace ForoWebApp.Services;
 
@@ -7,8 +9,26 @@ public class ThemeService(UnitOfWork unitOfWork)
 {
 	private readonly UnitOfWork _unitOfWork = unitOfWork;
 
-	public async Task<IList<Theme>> GetThemes()
+	public Task<List<Theme>> GetThemes()
 	{
-		return await _unitOfWork.ThemesRepository.GetAllAsync(); 
+		return _unitOfWork.ThemesRepository.GetAllAsync(); 
 	}
+
+	public Task<ThemeViewModel> GetThemeThreads(string themeId)
+	{
+        var threadCollection = _unitOfWork.ThreadsRepository.GetCollectionAsQueryable();
+        var themeCollection = _unitOfWork.ThemesRepository.GetCollectionAsQueryable();
+
+        var threadsQueryable = from theme in themeCollection
+                     join thread in threadCollection on theme.Id equals thread.ThemeId
+                     where theme.Id == themeId
+                     group thread by theme into groupedTheme
+                     select new ThemeViewModel
+                     {
+                         ThemeTitle = groupedTheme.Key.Name,
+                         Threads = groupedTheme.ToList()
+                     };
+
+        return threadsQueryable.FirstAsync();
+    }
 }

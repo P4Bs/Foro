@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ForoWebApp.Views.Threads
+namespace ForoWebApp.Views.Themes
 {
-    public class IndexModel : PageModel
+    public class GetThemeModel : PageModel
     {
         public void OnGet()
         {

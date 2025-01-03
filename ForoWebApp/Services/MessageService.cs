@@ -25,7 +25,7 @@ public class MessageService(UnitOfWork unitOfWork)
 						 UserId = user.Id,
 						 UserName = user.Name,
 						 UserProfilePicture = user.ProfilePicture,
-						 MessageContent = message.Content,
+						 Content = message.Content,
 						 PublishingDate = message.PublishingDate
 					 };
 

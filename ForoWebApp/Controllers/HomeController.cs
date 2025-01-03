@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ForoWebApp.Database.Documents;
 using ForoWebApp.Models;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,10 @@ namespace ForoWebApp.Controllers
         private readonly ILogger<HomeController> _logger = logger;
         private readonly ThemeService _themeService = themeService;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Theme> themesList = await _themeService.GetThemes();
+            return View(themesList);
         }
 
         public async Task<IActionResult> Privacy()
