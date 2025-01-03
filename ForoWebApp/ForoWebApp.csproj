@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Themes\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

@@ -1,21 +1,21 @@
 ﻿using ForoWebApp.Database.Documents;
 using ForoWebApp.Models;
+using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
 
-[Route("[controller]")]
-public class ThreadsController(ILogger<ThreadsController> logger, ThreadService threadService) : Controller
+public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService) : Controller
 {
-	private readonly ILogger<ThreadsController> _logger = logger;
+	private readonly ILogger<ThreadController> _logger = logger;
 	private readonly ThreadService _threadService = threadService;
 
 	[HttpGet]
-	public async Task<IActionResult> GetThreadsByThemeId([FromQuery] string themeId)
+	public async Task<IActionResult> Thread(string themeId)
 	{
-		var threadsCursor = await _threadService.GetThreadsByThemeId(themeId);
-		return View(threadsCursor);
+		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(themeId);
+		return View(threadViewModel);
 	}
 
 	[HttpPost]

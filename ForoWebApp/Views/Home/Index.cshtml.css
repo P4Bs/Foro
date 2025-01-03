@@ -1,0 +1,27 @@
+﻿container {
+    display: block;
+}
+
+container.h1 {
+
+}
+
+separator{
+    width: 100%;
+    background-color: black;
+    height: 1px;
+    display: block;
+    transition: all 0.2s;
+}
+
+.theme-title-bold{
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: bold;
+    text-align: left;
+    color: black;
+}
+
+.theme-description{
+    color: black;
+}

@@ -1,6 +1,8 @@
 ﻿using ForoWebApp.Database;
 using ForoWebApp.Database.Documents;
+using ForoWebApp.Models.ViewModels;
 using MongoDB.Driver.Linq;
+using System.Threading.Tasks.Dataflow;
 
 namespace ForoWebApp.Services;
 
@@ -8,15 +10,39 @@ public class ThreadService(UnitOfWork unitOfWork)
 {
 	private readonly UnitOfWork _unitOfWork = unitOfWork;
 
-	public async Task<IList<ForumThread>> GetThreadsByThemeId(string themeId)
+	public Task<string> PublishThread(ForumThread thread)
 	{
-		var collection = _unitOfWork.ThreadsRepository.GetCollectionAsQueryable();
-
-		return await collection.Where(thread => thread.ThemeId == themeId).ToListAsync();
+		return _unitOfWork.ThreadsRepository.InsertAsync(thread);
 	}
 
-	public async Task<string> PublishThread(ForumThread thread)
+	public Task<ThreadViewModel> GetThreadMessages(string threadId)
 	{
-		return await _unitOfWork.ThreadsRepository.InsertAsync(thread);
+		var messageCollection = _unitOfWork.MessagesRepository.GetCollectionAsQueryable();
+		var threadsCollection = _unitOfWork.ThreadsRepository.GetCollectionAsQueryable();
+		var usersCollection = _unitOfWork.UsersRepository.GetCollectionAsQueryable();
+
+		var messagesQuery = from thread in threadsCollection
+							join message in messageCollection on thread.Id equals message.Id
+							join user in usersCollection on message.UserId equals user.Id
+							where thread.Id == threadId
+							group new { message, user } by thread into groupedThread
+							select new ThreadViewModel
+							{
+								ThreadId = groupedThread.Key.Id,
+								ThreadName = groupedThread.Key.Title,
+								Messages = groupedThread.AsEnumerable().Select(
+									groupedMessage => new MessageViewModel
+									{
+										Id = groupedMessage.message.Id,
+										UserId = groupedMessage.user.Id,
+										UserName = groupedMessage.user.Name,
+										Content = groupedMessage.message.Content,
+										PublishingDate = groupedMessage.message.PublishingDate,
+										UserProfilePicture = groupedMessage.user.ProfilePicture
+									}
+								)
+							};
+
+		return messagesQuery.FirstOrDefaultAsync();
 	}
 }

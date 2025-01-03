@@ -1,0 +1,27 @@
+﻿@page
+@model ForoWebApp.Models.ViewModels.ThreadViewModel
+@{
+    ViewData["Title"] = "Thread";
+}
+@functions{
+    public string ImageToBase64(byte[] image) => $"data:image/png;base64{Convert.ToBase64String(image)}";
+}
+
+<h1>@Model.ThreadName</h1>
+<div id="container">
+    <h1 style="margin-left: 18px;">Temas</h1>
+    <div style="margin-left: 18px;">
+        @foreach (var message in Model.Messages)
+        {
+            <separator></separator>
+            <a style="display: block; text-decoration: none">
+                <div class="display: flex, flex-direction: column; margin: 20px 0 20px 0; flex: 1">
+                    <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
+                        <h2 class="theme-title-bold">@message.Content</h2>
+                    </div>
+                    <img src="@ImageToBase64(message.UserProfilePicture)" />
+                </div>
+            </a>
+        }
+    </div>
+</div>

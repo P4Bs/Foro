@@ -20,7 +20,7 @@ public class User : IDocument
     public string Password { get; set; }
 
     [BsonElement("registeredAt")]
-	public DateOnly RegisteredAt { get; set; }
+	public DateTime RegisteredAt { get; set; }
 
 	[BsonElement("profilePicture")]
 	public byte[]? ProfilePicture { get; set; }
