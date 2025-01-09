@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-namespace ForoWebApp.Models.ViewModels;
+﻿namespace ForoWebApp.Models.ViewModels;
 
 public class MessageViewModel
 {

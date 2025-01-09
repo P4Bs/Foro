@@ -25,6 +25,7 @@ public class ThemeService(UnitOfWork unitOfWork)
                      group thread by theme into groupedTheme
                      select new ThemeViewModel
                      {
+                         ThemeId = groupedTheme.Key.Id,
                          ThemeTitle = groupedTheme.Key.Name,
                          Threads = groupedTheme.ToList()
                      };

@@ -21,7 +21,6 @@ public class MessageService(UnitOfWork unitOfWork)
 					 select new MessageViewModel
 					 {
 						 Id = message.Id,
-						 ThreadId = message.ThreadId,
 						 UserId = user.Id,
 						 UserName = user.Name,
 						 UserProfilePicture = user.ProfilePicture,

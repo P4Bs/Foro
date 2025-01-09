@@ -12,7 +12,7 @@ public class MessageController(ILogger<MessageController> logger, MessageService
 	private readonly MessageService _messageService = messageService;
 
 	[HttpGet]
-	public async Task<IActionResult> GetMessagesByThreadId([FromQuery] string threadId)
+	public async Task<IActionResult> GetMessages([FromQuery] string threadId)
 	{
 		var messagesList = await _messageService.GetThreadMessages(threadId);
 		return View(messagesList);

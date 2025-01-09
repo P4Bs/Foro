@@ -1,0 +1,10 @@
+﻿@model NewThreadData
+
+<form asp-action="CreateNewThread">
+    <label> El diablaso: @Model.ThemeId</label>
+    <input type="hidden" name="ThemeId" value="@Model.ThemeId"/>
+    <input type="text" id="title" name="Title" />
+    <input type="text" id="messageContent" name="MessageContent" />
+
+    <button type="submit">Nuevo hilo</button>
+</form>

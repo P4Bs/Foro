@@ -2,3 +2,26 @@
 @{
     ViewData["Title"] = "Theme";
 }
+
+<div id="container">
+    <h1 style="margin-left: 18px;">Hilos</h1>
+    <form asp-controller="Thread" asp-action="NewThread" asp-route-themeId="@Model.ThemeId">
+        <button type="submit">Crear nuevo Hilo</button>
+    </form>
+
+    <div style="margin-left: 18px;">
+        @foreach(var thread in Model.Threads)
+        {
+            <separator></separator>
+            <a style="display: block; text-decoration: none" asp-controller="Message" asp-action="GetMessages" asp-route-threadId="@thread.Id">
+                <div class="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
+                    <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
+                        <h2 class="theme-title-bold">@thread.Title</h2>
+                    </div>
+                    @* TAS SEGURO AMEGO? *@
+                    <div class="theme-description">@thread.CreatedAt</div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

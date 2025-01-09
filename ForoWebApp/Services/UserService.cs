@@ -20,4 +20,18 @@ public class UserService(UnitOfWork unitOfWork)
 
 		return _unitOfWork.UsersRepository.TryRegister(newUser);
     }
+
+	public async Task<(string, bool)> LogUser(UserLoginModel model)
+	{
+		User? userResult = await _unitOfWork.UsersRepository.FindUserByLogin(model);
+
+		if(userResult == null)
+		{
+			return (null, false);
+		}
+
+		return (userResult.Id, true);
+	}
 }
+
+
