@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using ForoWebApp.Database.Documents;
-using ForoWebApp.Models;
+using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 

@@ -25,4 +25,17 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 			return View(userId);
 		}
 	}
+
+	public async Task<IActionResult> LogIn(UserLoginModel userLogin)
+	{
+		(string userId, bool successfulLogin) = await _userService.LogUser(userLogin);
+
+		if (successfulLogin)
+		{
+			//TODO: TOKEN? ??
+		}
+
+		//todo: xd
+		return null;
+	}
 }

@@ -14,5 +14,4 @@ public class ThemeController(ILogger<ThemeController> logger, ThemeService theme
 		ThemeViewModel theme = await _themeService.GetThemeThreads(themeId);
 		return View(theme);
 	}
-
 }

@@ -1,4 +1,4 @@
-namespace ForoWebApp.Models
+namespace ForoWebApp.Models.ViewModels
 {
     public class ErrorViewModel
     {
