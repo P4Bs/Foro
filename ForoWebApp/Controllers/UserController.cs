@@ -1,41 +1,53 @@
-﻿using ForoWebApp.Models;
+﻿using ForoWebApp.Database.Documents;
+using ForoWebApp.Models;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
 
-[Route("[controller]")]
 public class UserController(ILogger<UserController> logger, UserService userService) : Controller
 {
 	private readonly ILogger<UserController> _logger = logger;
 	private readonly UserService _userService = userService;
 
-	public async Task<IActionResult> RegisterUser(UserRegistrationModel userData)
+	public IActionResult LogIn()
 	{
-		(string userId, bool successfulRegister) = await _userService.RegisterUser(userData);
-
-		if (successfulRegister)
-		{
-			return new RedirectResult($"/user/userId={userId}");
-		}
-		else
-		{
-			//TODO: put log error
-			_logger.LogError("");
-			return View(userId);
-		}
+		return View();
 	}
 
-	public async Task<IActionResult> LogIn(UserLoginModel userLogin)
+	public IActionResult Registration()
 	{
-		(string userId, bool successfulLogin) = await _userService.LogUser(userLogin);
+		return View();
+	}
 
-		if (successfulLogin)
+	public async Task<IActionResult> RegisterUser(UserRegistrationModel userData)
+	{
+		(string userToken, User newUser) = await _userService.RegisterUser(userData);
+
+		if (userToken == null)
 		{
-			//TODO: TOKEN? ??
+            // TODO: PUT ERROR
+            _logger.LogError("No se pudo registrar al usuario");
+			return new RedirectResult("/");
+            
 		}
 
-		//todo: xd
-		return null;
+		HttpContext.Session.SetString("AuthToken", userToken);
+
+        return new RedirectResult($"/user/userId={newUser.Id}");
+    }
+
+	public async Task<IActionResult> LogUser(UserLoginModel userLogin)
+	{
+		string userToken = await _userService.LogUser(userLogin);
+
+		if (userToken == null)
+		{
+			return Unauthorized();
+		}
+
+        HttpContext.Session.SetString("AuthToken", userToken);
+
+        return Ok(userToken);
 	}
 }

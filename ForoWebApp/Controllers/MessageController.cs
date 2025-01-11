@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
 
-[Route("[controller]")]
 public class MessageController(ILogger<MessageController> logger, MessageService messageService) : Controller
 {
 	private readonly ILogger<MessageController> _logger = logger;
