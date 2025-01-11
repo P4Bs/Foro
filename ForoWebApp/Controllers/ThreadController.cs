@@ -2,16 +2,19 @@
 using ForoWebApp.Models;
 using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
 
+[Authorize]
 public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService, MessageService messageService) : Controller
 {
 	private readonly ILogger<ThreadController> _logger = logger;
 	private readonly ThreadService _threadService = threadService;
 	private readonly MessageService _messageService = messageService;
 
+	[AllowAnonymous]
 	[HttpGet]
 	public async Task<IActionResult> Thread(string themeId)
 	{
@@ -24,17 +27,12 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         return View(model: new NewThreadData(themeId));
     }
 
-    public IActionResult CreateThread()
-    {
-        return View();
-    }
-
     [HttpPost]
-	public async Task<IActionResult> CreateNewThread([FromBody] CreateThreadData newThreadData)
+	public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadData newThreadData)
 	{
 		ForumThread newThread = new()
 		{
-			ThemeId = newThreadData.ThemeId,
+			ThemeId = themeId,
 			Title = newThreadData.Title,
 			CreatedAt = DateTime.UtcNow,
 			IsClosed = false,
@@ -65,8 +63,8 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 		try
 		{
 			messageId = await _messageService.PublishMessage(newMessage);
-        }
-		catch(Exception ex)
+		}
+		catch (Exception ex)
 		{
 			_logger.LogError("{exceptionMessage}", ex.Message);
 		}

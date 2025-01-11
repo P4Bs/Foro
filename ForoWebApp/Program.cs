@@ -1,6 +1,9 @@
 using ForoWebApp.Database;
 using ForoWebApp.Models.Settings;
 using ForoWebApp.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +20,38 @@ builder.Services.AddScoped<UnitOfWork>();
 //TODO: REGISTRATE REPOSITORIES
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddScoped<ThreadService>();
-
+builder.Services.AddScoped<MessageService>();
+builder.Services.AddScoped<UserService>();
 #endregion
+
+builder.Services.AddAuthentication(configuration =>
+{
+    configuration.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    configuration.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(configuration =>
+{
+    configuration.RequireHttpsMetadata = false;
+    configuration.SaveToken = true;
+    configuration.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Secret").ToString())),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+builder.Services.AddRazorPages();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
@@ -34,9 +67,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

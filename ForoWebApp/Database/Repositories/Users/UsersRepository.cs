@@ -7,7 +7,7 @@ namespace ForoWebApp.Database.Repositories.Users;
 
 public class UsersRepository(DbContext context) : GenericRepository<User>(context.Users)
 {
-	public async Task<(string, bool)> TryRegister(User user)
+	public async Task<bool> TryRegister(User user)
 	{
 		try
 		{
@@ -15,10 +15,10 @@ public class UsersRepository(DbContext context) : GenericRepository<User>(contex
 		}
 		catch (Exception)
         {
-			return (null, false);
+			return false;
 		}
 
-		return (user.Id, true);
+		return true;
 	}
 
 	public Task<User> FindUserByLogin(UserLoginModel loginModel)

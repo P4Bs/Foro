@@ -1,10 +1,18 @@
 ﻿@model NewThreadData
 
-<form asp-action="CreateNewThread">
-    <label> El diablaso: @Model.ThemeId</label>
-    <input type="hidden" name="ThemeId" value="@Model.ThemeId"/>
-    <input type="text" id="title" name="Title" />
-    <input type="text" id="messageContent" name="MessageContent" />
+<form asp-controller="Thread" asp-action="CreateNewThread" asp-route-themeId="@Model.ThemeId" method="post">
+    <label>Crear nuevo hilo</label>
+    <div>
+        <label> Titulo del hilo</label>
+        <input type="text" id="title" name="Title" />
+    </div>
 
-    <button type="submit">Nuevo hilo</button>
+    <div>
+        <label> Mensaje</label>
+        <input type="text" id="messageContent" name="MessageContent" />
+    </div>
+
+    <div>
+        <button type="submit">Crear nuevo hilo</button>
+    </div>
 </form>
