@@ -1,8 +1,4 @@
-﻿@{
-    string userToken = HttpContextAccessor.HttpContext.Session.GetString("AuthToken");
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,16 +28,16 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @if(string.IsNullOrEmpty(userToken))
+                        @if(AuthenticationHelper.IsAuthenticated())
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogIn">Registrarse</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Perfil">Mirar el perfil</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Perfil">Mirar el perfil</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogIn">Iniciar sesión</a>
                             </li>
                         }
                     </ul>

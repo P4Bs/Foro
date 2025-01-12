@@ -1,6 +1,19 @@
-﻿@{
-}
+﻿<h1>Iniciar Sesión</h1>
 
 <div>
-    ERES NUEVO? <a class="nav-link text-dark" asp-controller="User" asp-action="Registration"> REGISTRATE</a>
+    <form asp-controller="User" asp-action="LogUser" method="post">
+        <div>
+            <label>Nombre de usuario</label>
+            <input type="text" id="username" name="username" />
+        </div>
+
+        <div>
+            <label>Contraseña</label>
+            <input type="password" id="password" name="password" />
+        </div>
+    </form>
+</div>
+
+<div>
+    ¿No estás registado? - <a class="nav-link text-dark" asp-controller="User" asp-action="Registration">Registrate</a>
 </div>

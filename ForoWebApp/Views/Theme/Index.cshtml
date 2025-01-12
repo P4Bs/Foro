@@ -1,25 +1,19 @@
 ﻿@model ThemeViewModel
 @{
     ViewData["Title"] = "Theme";
-    string userToken = HttpContextAccessor.HttpContext.Session.GetString("AuthToken");
-}
-@functions{
-
 }
 
 <div id="container">
     <h1 style="margin-left: 18px;">Hilos</h1>
-    @if(!string.IsNullOrEmpty(userToken)){
-        <form asp-controller="Thread" asp-action="NewThread" asp-route-themeId="@Model.ThemeId">
-            <button type="submit">Crear nuevo Hilo</button>
-        </form>
-    }
+    <form asp-controller="Thread" asp-action="NewThread" asp-route-themeId="@Model.ThemeId">
+        <button type="submit">Crear nuevo Hilo</button>
+    </form>
 
     <div style="margin-left: 18px;">
         @foreach(var thread in Model.Threads)
         {
             <separator></separator>
-            <a style="display: block; text-decoration: none" asp-controller="Message" asp-action="GetMessages" asp-route-threadId="@thread.Id">
+            <a style="display: block; text-decoration: none" asp-controller="Thread" asp-action="Thread" asp-route-threadId="@thread.Id">
                 <div class="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
                     <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
                         <h2 class="theme-title-bold">@thread.Title</h2>

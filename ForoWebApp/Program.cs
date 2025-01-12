@@ -1,6 +1,7 @@
 using ForoWebApp.Database;
 using ForoWebApp.Models.Settings;
 using ForoWebApp.Services;
+using ForoWebApp.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,6 +16,8 @@ builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDB
 builder.Services.AddScoped<DbContext>();
 builder.Services.AddScoped<UnitOfWork>();
 #endregion
+
+builder.Services.AddSingleton<AuthenticationHelper>();
 
 #region Entity Repositories Registration
 //TODO: REGISTRATE REPOSITORIES
