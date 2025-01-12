@@ -1,14 +1,14 @@
 ﻿@model NewThreadData
 
+<h1>Crear nuevo hilo</h1>
 <form asp-controller="Thread" asp-action="CreateNewThread" asp-route-themeId="@Model.ThemeId" method="post">
-    <label>Crear nuevo hilo</label>
     <div>
-        <label> Titulo del hilo</label>
+        <label>Titulo del hilo</label>
         <input type="text" id="title" name="Title" />
     </div>
 
     <div>
-        <label> Mensaje</label>
+        <label>Mensaje</label>
         <input type="text" id="messageContent" name="MessageContent" />
     </div>
 

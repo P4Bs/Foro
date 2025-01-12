@@ -16,14 +16,18 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 
 	[AllowAnonymous]
 	[HttpGet]
-	public async Task<IActionResult> Thread(string themeId)
+	public async Task<IActionResult> Thread(string threadId)
 	{
-		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(themeId);
+		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(threadId);
 		return View(threadViewModel);
 	}
 
     public IActionResult NewThread(string themeId)
     {
+		if (HttpContext.Session.GetString("AuthToken") == null)
+		{
+			return View("NoAutorizado");
+		}
         return View(model: new NewThreadData(themeId));
     }
 

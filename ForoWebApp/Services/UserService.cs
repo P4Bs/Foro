@@ -17,10 +17,10 @@ public class UserService(IConfiguration configuration, UnitOfWork unitOfWork)
 	{
 		User newUser = new()
 		{
-			Name = model.Name,
+			Name = model.Username,
 			Email = model.Email,
 			Password = model.Password,
-			RegisteredAt = model.RegisteredAt,
+			RegisteredAt = DateTime.UtcNow,
 		};
 
 		bool success = await _unitOfWork.UsersRepository.TryRegister(newUser);

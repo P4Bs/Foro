@@ -1,5 +1,4 @@
-﻿@page
-@model ForoWebApp.Models.ViewModels.ThreadViewModel
+﻿@model ForoWebApp.Models.ViewModels.ThreadViewModel
 @{
     ViewData["Title"] = "Thread";
 }
@@ -7,21 +6,51 @@
     public string ImageToBase64(byte[] image) => $"data:image/png;base64{Convert.ToBase64String(image)}";
 }
 
-<h1>@Model.ThreadName</h1>
-<div id="container">
-    <h1 style="margin-left: 18px;">Temas</h1>
-    <div style="margin-left: 18px;">
-        @foreach (var message in Model.Messages)
-        {
-            <separator></separator>
-            <a style="display: block; text-decoration: none">
-                <div class="display: flex, flex-direction: column; margin: 20px 0 20px 0; flex: 1">
-                    <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
-                        <h2 class="theme-title-bold">@message.Content</h2>
-                    </div>
-                    <img src="@ImageToBase64(message.UserProfilePicture)" />
-                </div>
-            </a>
-        }
+<section style="margin-bottom: 0px;">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+        <h1 style="margin-bottom: 0px; word-break: break-word">@Model.ThreadName</h1>
     </div>
+</section>
+<section style="margin-top: 0; margin-bottom: 0; padding: 0;"></section>
+<div id="posts">
+    @foreach (var message in Model.Messages)
+    {
+        <div>
+            <section style="margin: 0; padding-bottom: 6px; flex: 1; border-left: solid 4px #FD5D4D;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
+                        <!-- User Profile picture and username-->
+                        <div style="display: flex; align-items: center">
+                            <a style="height: 46px; position: relative" asp-controller="User" asp-action="Profile" asp-route-userId="@message.UserId">
+                                @if (message.UserProfilePicture == null)
+                                {
+                                    <img style="border-radius: 50%;" src="~/img/default-user-image.jpg" />
+                                }
+                                else 
+                                {
+                                    <img style="border-radius: 50%;" src="@ImageToBase64(message.UserProfilePicture)" />
+                                }
+                            </a>
+                            <div style="display: flex; flex-direction: column; margin-left: 28px">
+                                <div>
+                                    <a style="font-size: 1rem; color: #FD5D4D; font-weight: bold" asp-controller="User" asp-action="Profile" asp-route-userId="@message.UserId">
+                                        @message.UserName
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Publishing date -->
+                        <div style="display: flex; flex-direction: column; align-items: flex-end">
+                            <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 4px">
+                                <span style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; color: #949494">
+                                    @message.PublishingDate
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <separator style="margin-bottom: 14px"></separator>
+            </section>
+        </div>
+    }
 </div>
