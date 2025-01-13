@@ -1,24 +1,30 @@
-﻿using ForoWebApp.Database.Documents;
+﻿using ForoWebApp.Builders;
+using ForoWebApp.Database.Documents;
+using ForoWebApp.Managers;
 using ForoWebApp.Models;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
-public class UserController(ILogger<UserController> logger, UserService userService) : Controller
+public class UserController(ILogger<UserController> logger, UserService userService, CredentialsManager credentialsManager) : Controller
 {
 	private readonly ILogger<UserController> _logger = logger;
 	private readonly UserService _userService = userService;
+	private readonly CredentialsManager _credentialsManager = credentialsManager;
 
 	[HttpGet]
-	public IActionResult LogIn()
+	public IActionResult Login()
 	{
-		if(HttpContext.Session.GetString("AuthToken") == null)
+		if (User.Identity.IsAuthenticated)
 		{
-            return View();
-        }
-		return new RedirectResult("User/Profile");
+			return RedirectToAction("Index");
+		}
+		return View();
     }
 
 
@@ -37,33 +43,58 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 	[HttpPost]
 	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationModel userData)
 	{
-		(string userToken, User newUser) = await _userService.RegisterUser(userData);
+		RegistrationResult result = await _userService.RegisterUser(userData);
 
-		if (userToken == null)
+		if (!result.Success)
 		{
             // TODO: PUT ERROR
             _logger.LogError("No se pudo registrar al usuario");
 			return new RedirectResult("/");
-            
 		}
 
-		HttpContext.Session.SetString("AuthToken", userToken);
+		(ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
 
-        return new RedirectResult($"/user/userId={newUser.Id}");
+		await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
+
+		return new RedirectResult("Index");
     }
 
 	[HttpPost]
 	public async Task<IActionResult> LogUser([FromForm] UserLoginModel userLogin)
 	{
-		string userToken = await _userService.LogUser(userLogin);
+		LoginResult result = await _userService.LogUser(userLogin);
 
-		if (userToken == null)
+		if (!result.Success)
 		{
-			return Unauthorized();
+			return Unauthorized("Invalid user credentials");
 		}
 
-        HttpContext.Session.SetString("AuthToken", userToken);
+        (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
 
-        return Ok(userToken);
+		await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
+
+
+		return new RedirectResult("Index");
 	}
+
+	[HttpPost]
+	public async Task<IActionResult> Logout()
+	{
+		await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+		return RedirectToAction("Index");
+	}
+
+	private (ClaimsPrincipal, AuthenticationProperties) GenerateUserClaimsAndProperties(User user)
+	{
+        List<Claim> userClaims = TokenBuilder.GenerateUserClaims(user, _credentialsManager.SigningCredentials);
+		
+		var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+		var authenticationProperties = new AuthenticationProperties
+		{
+			IsPersistent = true
+		};
+
+		return (new ClaimsPrincipal(claimsIdentity), authenticationProperties);
+    }
 }

@@ -1,67 +1,52 @@
 ﻿using ForoWebApp.Database;
 using ForoWebApp.Database.Documents;
+using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace ForoWebApp.Services;
 
-public class UserService(IConfiguration configuration, UnitOfWork unitOfWork)
+public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 {
-	private readonly UnitOfWork _unitOfWork = unitOfWork;
-	private readonly byte[] _key = Encoding.ASCII.GetBytes(configuration.GetSection("Secret").ToString());
+    private readonly UnitOfWork _unitOfWork = unitOfWork;
+	private readonly IPasswordHelper _passwordHelper = passwordHelper;
 
-	public async Task<(string, User)> RegisterUser(UserRegistrationModel model)
+	public async Task<RegistrationResult> RegisterUser(UserRegistrationModel model)
 	{
+		var existingUser = _unitOfWork.UsersRepository.FindUser(model.Email);
+		if (existingUser != null)
+		{
+			return new RegistrationResult(success: false);
+		}
+
 		User newUser = new()
 		{
 			Name = model.Username,
 			Email = model.Email,
-			Password = model.Password,
 			RegisteredAt = DateTime.UtcNow,
 		};
+
+		var hashedPassword = _passwordHelper.HashPassword(newUser, model.Password);
+		newUser.Password = hashedPassword;
 
 		bool success = await _unitOfWork.UsersRepository.TryRegister(newUser);
 
 		if (!success)
 		{
-			return (null, null);
+			return new RegistrationResult(success: false);
 		}
 
-		string userToken = GetUserToken(newUser);
-
-		return (userToken, newUser);
+		return new RegistrationResult(success: true, newUser);
     }
 
-	public async Task<string> LogUser(UserLoginModel model)
+	public async Task<LoginResult> LogUser(UserLoginModel model)
 	{
-		User? userData = await _unitOfWork.UsersRepository.FindUserByLogin(model);
+		User user = await _unitOfWork.UsersRepository.FindUser(model.Email);
 
-		if(userData == null)
+		if(user == null || _passwordHelper.VerifyPassword(user, user.Password, model.Password))
 		{
-			return null;
+			return new LoginResult(success: false);
 		}
-		
-		return GetUserToken(userData);
+
+		return new LoginResult(success: true, user);
 	}
-
-	private string GetUserToken(User userData)
-	{
-        JwtSecurityTokenHandler tokenHandler = new();
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(
-            [
-                new(ClaimTypes.Email, userData.Email)
-            ]),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256)
-        };
-
-        SecurityToken userToken = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(userToken);
-    }
 }
