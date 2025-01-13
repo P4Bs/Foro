@@ -22,15 +22,14 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 		return View(threadViewModel);
 	}
 
+	[Authorize(Policy = "RegisteredUser")]
+	[HttpGet]
     public IActionResult NewThread(string themeId)
     {
-		if (HttpContext.Session.GetString("AuthToken") == null)
-		{
-			return View("NoAutorizado");
-		}
         return View(model: new NewThreadData(themeId));
     }
 
+	[Authorize(Policy = "RegisteredUser")]
     [HttpPost]
 	public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadData newThreadData)
 	{

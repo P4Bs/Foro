@@ -1,8 +1,12 @@
 using ForoWebApp.Database;
+using ForoWebApp.Database.Documents;
+using ForoWebApp.Helpers.Passwords;
+using ForoWebApp.Managers;
 using ForoWebApp.Models.Settings;
 using ForoWebApp.Services;
 using ForoWebApp.Utils;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -19,40 +23,43 @@ builder.Services.AddScoped<UnitOfWork>();
 
 builder.Services.AddSingleton<AuthenticationHelper>();
 
-#region Entity Repositories Registration
-//TODO: REGISTRATE REPOSITORIES
+#region Entity Services
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddScoped<ThreadService>();
 builder.Services.AddScoped<MessageService>();
 builder.Services.AddScoped<UserService>();
 #endregion
 
-builder.Services.AddAuthentication(configuration =>
+#region Managers and Helpers
+builder.Services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddSingleton<CredentialsManager>();
+builder.Services.AddSingleton<IPasswordHelper, PasswordHelper>();
+#endregion
+
+#region Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddCookie(options =>
 {
-    configuration.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    configuration.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    options.LoginPath = "/User/Login";
+    options.LogoutPath = "/User/Logout";
+    options.AccessDeniedPath = "/User/AccessDenied";
+ })
 .AddJwtBearer(configuration =>
 {
     configuration.RequireHttpsMetadata = false;
     configuration.SaveToken = true;
     configuration.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Secret").ToString())),
-        ValidateIssuer = false,
-        ValidateAudience = false
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Secret").Value)),
     };
 });
+#endregion
 
 builder.Services.AddRazorPages();
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromDays(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
 builder.Services.AddHttpContextAccessor();
 
@@ -74,8 +81,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
-app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

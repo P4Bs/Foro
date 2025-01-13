@@ -28,10 +28,10 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @if(AuthenticationHelper.IsAuthenticated())
+                        @if(User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Perfil">Mirar el perfil</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Perfil">Perfil</a>
                             </li>
                         }
                         else

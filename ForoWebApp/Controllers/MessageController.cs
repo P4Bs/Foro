@@ -1,6 +1,7 @@
 ﻿using ForoWebApp.Database.Documents;
 using ForoWebApp.Models;
 using ForoWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
@@ -18,6 +19,7 @@ public class MessageController(ILogger<MessageController> logger, MessageService
 	}
 
 	[HttpPost]
+	[Authorize(Policy = "RegisteredUser")]
 	public async Task<IActionResult> PublishMessageInThread([FromBody] CreateMessageData messageData)
 	{
 		Message newMessage = new()

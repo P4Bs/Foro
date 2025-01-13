@@ -21,8 +21,8 @@ public class UsersRepository(DbContext context) : GenericRepository<User>(contex
 		return true;
 	}
 
-	public Task<User> FindUserByLogin(UserLoginModel loginModel)
+	public Task<User> FindUser(string userEmail)
 	{
-		return Collection.AsQueryable().FirstOrDefaultAsync(user => user.Email == loginModel.Email && user.Password == loginModel.Password);
+		return Collection.AsQueryable().FirstOrDefaultAsync(user => user.Email == userEmail);
 	}
 }
