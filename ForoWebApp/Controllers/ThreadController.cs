@@ -4,10 +4,11 @@ using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
-[Authorize]
+[Route("[controller]")]
 public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService, MessageService messageService) : Controller
 {
 	private readonly ILogger<ThreadController> _logger = logger;
@@ -15,25 +16,31 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 	private readonly MessageService _messageService = messageService;
 
 	[AllowAnonymous]
-	[HttpGet]
-	public async Task<IActionResult> Thread(string threadId)
+	[HttpGet("{id}")]
+	public async Task<IActionResult> Index(string id)
 	{
-		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(threadId);
+		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(id);
 		return View(threadViewModel);
 	}
 
-	[Authorize(Policy = "RegisteredUser")]
-	[HttpGet]
+	[Authorize]
     public IActionResult NewThread(string themeId)
     {
         return View(model: new NewThreadData(themeId));
     }
 
-	[Authorize(Policy = "RegisteredUser")]
+	[Authorize]
     [HttpPost]
 	public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadData newThreadData)
 	{
-		ForumThread newThread = new()
+        string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (userId == null)
+        {
+            _logger.LogError("No se pudo obtener el id del usuario");
+            return Unauthorized();
+        }
+
+        ForumThread newThread = new()
 		{
 			ThemeId = themeId,
 			Title = newThreadData.Title,
@@ -53,12 +60,12 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 			_logger.LogError("{exceptionMessage}", ex.Message);
 			throw;
 		}
-
+        
 		Message newMessage = new()
 		{
 			ThreadId = threadId,
-			UserId = HttpContext.Session.GetString("UserId"),
-			Content = newThreadData.MessageContent,
+			UserId = userId,
+            Content = newThreadData.MessageContent,
 			PublishingDate = DateTime.UtcNow
 		};
 

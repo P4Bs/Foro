@@ -9,7 +9,7 @@
         @foreach (var theme in Model)
         {
             <separator></separator>
-            <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-themeId="@theme.Id">
+            <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-id="@theme.Id">
                 <div class="display: flex, flex-direction: column; margin: 20px 0 20px 0; flex: 1">
                     <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
                         <h2 class="theme-title-bold">@theme.Name</h2>

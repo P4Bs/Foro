@@ -22,21 +22,29 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 	{
 		if (User.Identity.IsAuthenticated)
 		{
-			return RedirectToAction("Index");
+			return Redirect("/");
 		}
 		return View();
     }
 
 
 	[HttpGet]
-	public IActionResult Registration()
+	public IActionResult Register()
 	{
+		if (User.Identity.IsAuthenticated)
+		{
+			return RedirectToAction("Profile");
+		}
 		return View();
 	}
 
 	[HttpGet]
 	public IActionResult Profile()
 	{
+		if (!User.Identity.IsAuthenticated)
+		{
+			return RedirectToAction("Register");
+		}
 		return View();
 	}
 
@@ -72,7 +80,6 @@ public class UserController(ILogger<UserController> logger, UserService userServ
         (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
 
 		await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
-
 
 		return new RedirectResult("Index");
 	}
