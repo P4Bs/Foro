@@ -1,0 +1,33 @@
+﻿.without-bottom-corners {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.rounded-button {
+    transition: all 0.2s;
+    background: #FD5D4D;
+    border: 1px solid #FD5D4D;
+    border-radius: 32px;
+    padding: 12px 24px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
+.black-ribbon-title {
+    background-color: #333333;
+    margin: 0 10px;
+    font-size: 1.125rem;
+    color: white !important;
+    padding: 9px 16px;
+}
