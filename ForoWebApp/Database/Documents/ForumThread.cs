@@ -19,7 +19,19 @@ public class ForumThread : IDocument
 	[BsonElement("createdAt")]
 	public DateTime CreatedAt { get; set; }
 
-	[BsonElement("isClosed")]
+	[BsonElement("lastUpdateAt")]
+	public DateTime LastUpdateAt { get; set; }
+
+    [BsonElement("lastUpdateMessageId")]
+    public string LastUpdateMessageId { get; set; }
+
+    [BsonElement("lastUpdateUsername")]
+	public string LastUpdateUsername { get; set; }
+
+	[BsonElement("totalMessages")]
+	public int TotalMessages { get; set; }
+
+    [BsonElement("isClosed")]
 	public bool IsClosed { get; set; }
 
 	[BsonElement("closureDate")]

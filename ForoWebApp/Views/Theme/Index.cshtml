@@ -4,10 +4,10 @@
 }
 
 <div id="container">
-    <section class="without-bottom-corners" style="margin-bottom: 8px">
+    <section class="without-bottom-corners" style="margin-bottom: 24px">
         <div style="margin-left: 24px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
             <h1 style="margin: 0">@Model.ThemeTitle</h1>
-            <button class="rounded-button" style="font-size: 1rem; height: 46px; border-radius: 23px; padding: 0 24px" alt="Crear Nuevo Hilo" onclick="location.href='@Url.Action("NewThread","Thread", new { themeId = Model.ThemeId })>
+            <button class="rounded-button" style="font-size: 1rem; height: 46px; border-radius: 23px; padding: 0 24px" alt="Crear Nuevo Hilo" onclick="location.href='@Url.Action("NewThread","Thread", new { themeId = Model.ThemeId })'">
                 <span class="inner-buttom-text">Nuevo Hilo</span>
             </button>
         </div>
@@ -31,11 +31,21 @@
                             </span>
                         </a>
                     </span>
-                    <div style="">
-                        <!-- TODO PENDIENTE-->
+                    <div style="display: flex; flex-direction: row; align-items: center; margin: 4px 0 4px 0; justify-content: space-between;">
+                        <a style="display: block; text-decoration: none" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id">
+                            <span style="color: black;">
+                                <span style="font-weight: bold;">
+                                    @thread.LastUpdateUsername - Actualizado @thread.LastUpdatedAt
+                                </span>
+                            </span>
+                        </a>
+                        <div style="display: flex; flex-direction: row; align-items: center; gap: 12px;">
+                            
+                        </div>
                     </div>
                 </div>
             </div>
+            <separator style="height: 4px; background-color: #f5f5f5;"></separator>
         }
     </section>
     <div style="margin-left: 18px;">

@@ -3,9 +3,10 @@ using ForoWebApp.Database.Documents;
 using ForoWebApp.Managers;
 using ForoWebApp.Models;
 using ForoWebApp.Services;
+using ForoWebApp.Validators;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -49,28 +50,50 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationModel userData)
+	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationModel model)
 	{
-		RegistrationResult result = await _userService.RegisterUser(userData);
+		if (!ModelState.IsValid)
+		{
+			return View("Register", model);
+		}
+
+		// PASSWORD VALIDATION
+		var passwordErrors = PasswordValidator.ValidatePassword(model.Password, model.RepeatedPassword);
+
+		if (passwordErrors.Any())
+		{
+            foreach (var error in passwordErrors)
+            {
+                ModelState.AddModelError("Password", error);
+            }
+            return View("Register", model);
+        }
+
+        RegistrationResult result = await _userService.RegisterUser(model);
 
 		if (!result.Success)
 		{
             // TODO: PUT ERROR
             _logger.LogError("No se pudo registrar al usuario");
-			return new RedirectResult("/");
+			return Unauthorized();
 		}
 
 		(ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
 
 		await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
 
-		return new RedirectResult("Index");
+		return Redirect("/");
     }
 
 	[HttpPost]
-	public async Task<IActionResult> LogUser([FromForm] UserLoginModel userLogin)
+	public async Task<IActionResult> LogUser([FromForm] UserLoginModel model)
 	{
-		LoginResult result = await _userService.LogUser(userLogin);
+		if (!ModelState.IsValid)
+		{
+			return View("Login", model);
+		}
+
+		LoginResult result = await _userService.LogUser(model);
 
 		if (!result.Success)
 		{
