@@ -12,10 +12,13 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 
 	public async Task<RegistrationResult> RegisterUser(UserRegistrationModel model)
 	{
-		var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);
+		IList<string> validationErrors = [];
+        var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);
+
 		if (existingUser != null)
 		{
-			return new RegistrationResult(success: false);
+			validationErrors.Add("Ya existe un usuario registrado con este correo electrónico");
+            return new RegistrationResult(success: false, errors: validationErrors);
 		}
 
 		User newUser = new()
@@ -32,7 +35,8 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 
 		if (!success)
 		{
-			return new RegistrationResult(success: false);
+			validationErrors.Add("No se pudo registrar al usuario. Intentelo de nuevo pasado un momento");
+            return new RegistrationResult(success: false, errors: validationErrors);
 		}
 
 		return new RegistrationResult(success: true, newUser);
@@ -44,7 +48,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 
 		if(user == null || _passwordHelper.VerifyPassword(user, user.Password, model.Password))
 		{
-			return new LoginResult(success: false);
+			return new LoginResult(success: false, errors: ["El correo electrónico o la contraseña introducidos no son correctos"]);
 		}
 
 		return new LoginResult(success: true, user);

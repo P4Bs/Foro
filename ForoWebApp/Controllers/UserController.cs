@@ -6,7 +6,6 @@ using ForoWebApp.Services;
 using ForoWebApp.Validators;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -73,9 +72,12 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 
 		if (!result.Success)
 		{
-            // TODO: PUT ERROR
             _logger.LogError("No se pudo registrar al usuario");
-			return Unauthorized();
+			foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("Email", error);
+            }
+			return View("Register", model);
 		}
 
 		(ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
@@ -97,14 +99,18 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 
 		if (!result.Success)
 		{
-			return Unauthorized("Invalid user credentials");
+			foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError("Email", error);
+            }
+			return View("Login", model);
 		}
 
         (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
 
 		await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
 
-		return new RedirectResult("Index");
+		return Redirect("/");
 	}
 
 	[HttpPost]
@@ -112,7 +118,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 	{
 		await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-		return RedirectToAction("Index");
+		return Redirect("/");
 	}
 
 	private (ClaimsPrincipal, AuthenticationProperties) GenerateUserClaimsAndProperties(User user)
