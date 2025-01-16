@@ -27,7 +27,15 @@ public class ThemeService(UnitOfWork unitOfWork)
                      {
                          ThemeId = groupedTheme.Key.Id,
                          ThemeTitle = groupedTheme.Key.Name,
-                         Threads = groupedTheme.ToList()
+                         Threads = groupedTheme.Select(thread => new ThreadData
+                         {
+                             Id = thread.Id,
+                             Title = thread.Title,
+                             LastMessageId = thread.LastUpdateMessageId,
+                             LastUpdatedAt = thread.LastUpdateAt,
+                             LastUpdateUsername = thread.LastUpdateUsername,
+                             TotalMessages = thread.TotalMessages
+                         }).ToList()
                      };
 
         return threadsQueryable.FirstAsync();

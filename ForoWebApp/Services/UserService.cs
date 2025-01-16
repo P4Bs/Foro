@@ -12,7 +12,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 
 	public async Task<RegistrationResult> RegisterUser(UserRegistrationModel model)
 	{
-		var existingUser = _unitOfWork.UsersRepository.FindUser(model.Email);
+		var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);
 		if (existingUser != null)
 		{
 			return new RegistrationResult(success: false);
