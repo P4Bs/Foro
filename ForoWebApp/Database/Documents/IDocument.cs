@@ -1,6 +1,6 @@
-﻿namespace ForoWebApp.Database.Documents;
+namespace ForoWebApp.Database.Documents;
 
 public interface IDocument
 {
-	string Id { get; }
+    string Id { get; }
 }

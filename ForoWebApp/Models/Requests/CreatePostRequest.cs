@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Helpers.Message;
+using ForoWebApp.Helpers.Message;
 
 namespace ForoWebApp.Models.Requests;
 

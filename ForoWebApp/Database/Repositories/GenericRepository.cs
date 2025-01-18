@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Database.Documents;
+using ForoWebApp.Database.Documents;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -28,22 +28,22 @@ public abstract class GenericRepository<TDocument> : IGenericRepository<TDocumen
         return GetCollectionAsQueryable().FirstOrDefaultAsync(document => document.Id == id);
     }
 
-	public async Task<string> InsertAsync(TDocument document)
-	{
-	    await Collection.InsertOneAsync(document);
+    public async Task<string> InsertAsync(TDocument document)
+    {
+        await Collection.InsertOneAsync(document);
         return document.Id;
-	}
+    }
 
-	public async Task UpdateAsync(string id, UpdateDefinition<TDocument>[] documentUpdates)
-	{
+    public async Task UpdateAsync(string id, UpdateDefinition<TDocument>[] documentUpdates)
+    {
         await Collection.UpdateOneAsync(
-           filter: d => d.Id == id, 
+           filter: d => d.Id == id,
            update: Builders<TDocument>.Update.Combine(documentUpdates)
         );
-	}
+    }
 
-	public async Task DeleteAsync(string id)
-	{
+    public async Task DeleteAsync(string id)
+    {
         await Collection.DeleteOneAsync(document => document.Id == id);
-	}
+    }
 }

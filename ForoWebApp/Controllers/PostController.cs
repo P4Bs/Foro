@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Database.Documents;
+using ForoWebApp.Database.Documents;
 using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
@@ -10,38 +10,38 @@ namespace ForoWebApp.Controllers;
 [Route("[controller]")]
 public class PostController(ILogger<PostController> logger, PostService postService) : Controller
 {
-	private readonly ILogger<PostController> _logger = logger;
-	private readonly PostService _postService = postService;
+    private readonly ILogger<PostController> _logger = logger;
+    private readonly PostService _postService = postService;
 
-	[Authorize]
-	public IActionResult NewPost(string threadId)
-	{
-		return View(model: new NewPostViewModel(threadId));
-	}
+    [Authorize]
+    public IActionResult NewPost(string threadId)
+    {
+        return View(model: new NewPostViewModel(threadId));
+    }
 
     [Authorize]
     [HttpPost("publish")]
-	public async Task<IActionResult> PublishPostInThread([FromBody] CreatePostRequest request)
-	{
-		Post newPost = new()
-		{
-			ThreadId = request.ThreadId,
-			UserId = request.UserId,
-			Content = request.MessageContent,
-			PostDate = DateTime.UtcNow
-		};
+    public async Task<IActionResult> PublishPostInThread([FromBody] CreatePostRequest request)
+    {
+        Post newPost = new()
+        {
+            ThreadId = request.ThreadId,
+            UserId = request.UserId,
+            Content = request.MessageContent,
+            PostDate = DateTime.UtcNow
+        };
 
-		string postId;
+        string postId;
 
-		try
-		{
-			postId = await _postService.PublishPost(newPost);
-		}
-		catch (Exception)
-		{
-			throw;
-		}
+        try
+        {
+            postId = await _postService.PublishPost(newPost);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
 
-		return View(postId);
-	}
+        return View(postId);
+    }
 }

@@ -1,7 +1,6 @@
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
-* text=auto
 
 ###############################################################################
 # Set default behavior for command prompt diff.
@@ -11,6 +10,12 @@
 # Note: This is only used by command line
 ###############################################################################
 #*.cs     diff=csharp
+*.cs     text eol=crlf
+*.cshtml text eol=crlf
+*.js     text eol=crlf
+*.css    text eol=crlf
+*.html   text eol=crlf
+*.json   text eol=crlf
 
 ###############################################################################
 # Set the merge driver for project and solution files

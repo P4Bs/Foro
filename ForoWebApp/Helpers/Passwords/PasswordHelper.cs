@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Database.Documents;
+using ForoWebApp.Database.Documents;
 using Microsoft.AspNetCore.Identity;
 
 namespace ForoWebApp.Helpers.Passwords;

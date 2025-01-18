@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Database.Documents;
+using ForoWebApp.Database.Documents;
 using MongoDB.Driver;
 
 namespace ForoWebApp.Database.Repositories;
