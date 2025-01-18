@@ -26,7 +26,8 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 			Name = model.Username,
 			Email = model.Email,
 			RegisteredAt = DateTime.UtcNow,
-		};
+			Role = "user"
+        };
 
 		var hashedPassword = _passwordHelper.HashPassword(newUser, model.Password);
 		newUser.Password = hashedPassword;
@@ -46,7 +47,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 	{
 		User user = await _unitOfWork.UsersRepository.FindUser(model.Email);
 
-		if(user == null || _passwordHelper.VerifyPassword(user, user.Password, model.Password))
+		if(user == null || !_passwordHelper.VerifyPassword(user, user.Password, model.Password))
 		{
 			return new LoginResult(success: false, errors: ["El correo electrónico o la contraseña introducidos no son correctos"]);
 		}

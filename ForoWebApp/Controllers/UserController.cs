@@ -11,13 +11,14 @@ using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
+[Route("[controller]")]
 public class UserController(ILogger<UserController> logger, UserService userService, CredentialsManager credentialsManager) : Controller
 {
 	private readonly ILogger<UserController> _logger = logger;
 	private readonly UserService _userService = userService;
 	private readonly CredentialsManager _credentialsManager = credentialsManager;
 
-	[HttpGet]
+	[HttpGet("[action]")]
 	public IActionResult Login()
 	{
 		if (User.Identity.IsAuthenticated)
@@ -27,28 +28,17 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 		return View();
     }
 
-
-	[HttpGet]
+	[HttpGet("[action]")]
 	public IActionResult Register()
 	{
 		if (User.Identity.IsAuthenticated)
 		{
-			return RedirectToAction("Profile");
+			return Redirect("/");
 		}
 		return View();
 	}
 
-	[HttpGet]
-	public IActionResult Profile()
-	{
-		if (!User.Identity.IsAuthenticated)
-		{
-			return RedirectToAction("Register");
-		}
-		return View();
-	}
-
-	[HttpPost]
+	[HttpPost("RegisterUser")]
 	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationModel model)
 	{
 		if (!ModelState.IsValid)
@@ -87,7 +77,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 		return Redirect("/");
     }
 
-	[HttpPost]
+	[HttpPost("LogUser")]
 	public async Task<IActionResult> LogUser([FromForm] UserLoginModel model)
 	{
 		if (!ModelState.IsValid)
@@ -113,7 +103,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 		return Redirect("/");
 	}
 
-	[HttpPost]
+	[HttpPost("Logout")]
 	public async Task<IActionResult> Logout()
 	{
 		await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

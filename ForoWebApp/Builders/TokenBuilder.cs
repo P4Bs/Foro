@@ -14,13 +14,10 @@ public static class TokenBuilder
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new Claim(ClaimTypes.Role, user.Role)
         ];
 
-        // TODO: ISSUER???
         JwtSecurityToken userTokenDescriptor = new(
-            issuer: "MyIssuer",
-            audience: "MyAudience",
             claims: userClaims,
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: signingCredentials

@@ -39,10 +39,33 @@ button.accept-policy {
   line-height: inherit;
 }
 
+html, body {
+    height: 100%; /* Asegura que el cuerpo y el HTML ocupen toda la altura */
+    margin: 0; /* Elimina cualquier margen predeterminado */
+    display: flex;
+    flex-direction: column; /* Organiza los hijos del body verticalmente */
+}
+
+.container > main {
+    flex: 1; /* Hace que el contenedor ocupe todo el espacio disponible */
+    background-color: white;
+    padding: 20px; /* Opcional: agrega espacio interno si lo necesitas */
+}
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-nav .nav-item:last-child {
+    margin-left: auto; /* Empuja el último elemento al final */
 }

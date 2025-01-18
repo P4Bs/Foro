@@ -3,25 +3,31 @@
     ViewData["Title"] = "Thread";
 }
 @functions{
-    public string ImageToBase64(byte[] image) => $"data:image/png;base64{Convert.ToBase64String(image)}";
+    string GetCarroPictureSrc()
+    {
+        var files = Directory.GetFiles("wwwroot/img/carros");
+        int randomIndex = new Random().Next(files.Length);
+        string fileName = System.IO.Path.GetFileName(files[randomIndex]);
+        return $"/img/carros/{fileName}";
+    }
 }
 
 <section style="margin-bottom: 0px;">
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
-        <h1 style="margin-bottom: 0px; word-break: break-word">@Model.ThreadName</h1>
+    <div id="thread-name" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+        <h1 style="margin-bottom: 0px; word-break: break-word; font-size: x-large">@Model.ThreadName</h1>
     </div>
 </section>
-<section style="margin-top: 0; margin-bottom: 0; padding: 0;"></section>
-<div id="posts">
+<section style="margin-top: 0; margin-bottom: 0; padding: 0.5rem;"></section>
+<div id="thread-messages">
     @foreach (var message in Model.Messages)
     {
         <div>
-            <section style="margin: 0; padding-bottom: 6px; flex: 1; border-left: solid 4px #FD5D4D;">
+            <section style="margin: 0; padding: 0 0 6px 8px; flex: 1; border-left: solid 4px #FD5D4D;">
                 <div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
                         <!-- User Profile picture and username-->
                         <div style="display: flex; align-items: center">
-                            <a style="height: 46px; position: relative" asp-controller="User" asp-action="Profile" asp-route-userId="@message.UserId">
+@*                          <a style="height: 46px; position: relative" asp-controller="User" asp-action="Profile" asp-route-id="@message.UserId">
                                 @if (message.UserProfilePicture == null)
                                 {
                                     <img style="border-radius: 50%;" src="~/img/default-user-image.jpg" />
@@ -30,20 +36,24 @@
                                 {
                                     <img style="border-radius: 50%;" src="@ImageToBase64(message.UserProfilePicture)" />
                                 }
-                            </a>
-                            <div style="display: flex; flex-direction: column; margin-left: 28px">
+                            </a> *@
+                            <div id="user-profile-picture" style="height: 50px; position: relative">
+                                <img style="border-radius: 10%;" src="@GetCarroPictureSrc()" />
+                            </div>
+                            <div id="user-name" style="display: flex; flex-direction: column; margin-left: 28px">
                                 <div>
-                                    <a style="font-size: 1rem; color: #FD5D4D; font-weight: bold" asp-controller="User" asp-action="Profile" asp-route-userId="@message.UserId">
+@*                                  <a style="font-size: 1rem; color: #FD5D4D; font-weight: bold" asp-controller="User" asp-action="Profile" asp-route-id="@message.UserId">
                                         @message.UserName
-                                    </a>
+                                    </a> *@
+                                    <span style="font-size: 1.5rem; color: #FD5D4D; font-weight: bold">@message.UserName</span>
                                 </div>
                             </div>
                         </div>
                         <!-- Publishing date -->
                         <div style="display: flex; flex-direction: column; align-items: flex-end">
-                            <div style="display: flex; flex-direction: row; align-items: center; margin-bottom: 4px">
-                                <span style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; color: #949494">
-                                    @message.PublishingDate
+                            <div id="message-publish-date" style="display: flex; flex-direction: row; align-items: center; margin-bottom: 4px">
+                                <span style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; color: #949494; font-size: large;">
+                                    Publicado @DateFormatHelper.FormatDate(message.PublishingDate)
                                 </span>
                             </div>
                         </div>

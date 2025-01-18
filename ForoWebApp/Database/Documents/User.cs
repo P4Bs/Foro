@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using ForoWebApp.Database.Enums;
 
 namespace ForoWebApp.Database.Documents;
 
@@ -22,9 +21,6 @@ public class User : IDocument
     [BsonElement("registeredAt")]
 	public DateTime RegisteredAt { get; set; }
 
-	[BsonElement("profilePicture")]
-	public byte[]? ProfilePicture { get; set; }
-
-	[BsonElement("userRole")]
-	public UserRole Role { get; set; }
+    [BsonElement("role")]
+	public string Role { get; set; }
 }
