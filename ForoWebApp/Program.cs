@@ -4,7 +4,6 @@ using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Managers;
 using ForoWebApp.Models.Settings;
 using ForoWebApp.Services;
-using ForoWebApp.Utils;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -15,13 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+});
+
 #region Mongo Database Configuration
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddScoped<DbContext>();
 builder.Services.AddScoped<UnitOfWork>();
 #endregion
-
-builder.Services.AddSingleton<AuthenticationHelper>();
 
 #region Entity Services
 builder.Services.AddScoped<ThemeService>();
@@ -50,8 +52,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     configuration.SaveToken = true;
     configuration.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Secret").Value)),

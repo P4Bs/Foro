@@ -1,33 +1,118 @@
-﻿.without-bottom-corners {
-    margin-bottom: 0;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+﻿/* General container styles */
+#container {
+    margin-bottom: 24px;
+}
+
+/* Section with removed bottom corners */
+.without-bottom-corners {
+    margin-bottom: 24px;
+}
+
+/* Flex container for header */
+.header-flex-container {
+    margin-left: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .rounded-button {
-    transition: all 0.2s;
-    background: #FD5D4D;
-    border: 1px solid #FD5D4D;
-    border-radius: 32px;
-    padding: 12px 24px;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    cursor: pointer;
+    /* Sizing and dimensions */
+    height: 46px;
     max-width: 250px;
+    padding: 12px 24px;
+    border-radius: 32px;
+
+    /* Typography */
+    font-size: 0.75rem; /* Smaller font size for compact text */
+    text-transform: uppercase; /* Make text uppercase */
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    display: block;
-    text-overflow: ellipsis;
+
+    /* Colors and background */
+    background: #FD5D4D; /* Button background color */
+    color: white; /* Text color */
+    border: 1px solid #FD5D4D; /* Match border to background color */
+
+    /* Interactivity */
+    cursor: pointer;
+    transition: all 0.2s; /* Smooth transition for hover effects */
+
+    /* Layout */
+    display: block; /* Ensure button behaves as a block element */
+    text-decoration: none; /* Remove underline from text links */
 }
 
-.black-ribbon-title {
+/* Button text styles */
+.inner-buttom-text {
+    font-weight: bold;
+}
+
+/* Flex container for thread section */
+.thread-section-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background-color: #333333;
     margin: 0 10px;
-    font-size: 1.125rem;
-    color: white !important;
+}
+
+/* Black ribbon title */
+.black-ribbon-title {
     padding: 9px 16px;
+    margin: 0;
+    flex: 1;
+    color: white;
+    font-size: 1.125rem;
+}
+
+/* Thread item container */
+.thread-item-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 12px 0 24px;
+}
+
+/* Thread details container */
+.thread-details {
+    display: flex;
+    flex: 7;
+    padding: 0 10px 0 14px;
+    flex-direction: column;
+}
+
+/* Thread title */
+.thread-title {
+    font-size: 1rem;
+    margin-top: 6px;
+    font-weight: bold;
+    color: black;
+}
+
+/* Thread metadata container */
+.thread-metadata {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 4px 0;
+    justify-content: space-between;
+}
+
+/* Separator styles */
+.separator {
+    height: 4px;
+    background-color: #f5f5f5;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
 }

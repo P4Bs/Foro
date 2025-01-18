@@ -8,8 +8,6 @@ public class MessageViewModel
 
 	public string UserName { get; set; }
 
-	public byte[]? UserProfilePicture { get; set; }
-
 	public string Content { get; set; }
 
 	public DateTime PublishingDate { get; set; }

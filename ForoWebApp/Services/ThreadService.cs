@@ -37,7 +37,6 @@ public class ThreadService(UnitOfWork unitOfWork)
 										UserName = groupedMessage.user.Name,
 										Content = groupedMessage.message.Content,
 										PublishingDate = groupedMessage.message.PublishingDate,
-										UserProfilePicture = groupedMessage.user.ProfilePicture
 									}
 								)
 							};
