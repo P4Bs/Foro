@@ -1,6 +1,6 @@
 ﻿using ForoWebApp.Database.Documents;
-using ForoWebApp.Models;
 using ForoWebApp.Models.Requests;
+using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
