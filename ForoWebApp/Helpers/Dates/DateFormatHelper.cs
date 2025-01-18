@@ -1,4 +1,4 @@
-﻿namespace ForoWebApp.Helpers.Dates;
+namespace ForoWebApp.Helpers.Dates;
 
 public static class DateFormatHelper
 {
@@ -6,7 +6,7 @@ public static class DateFormatHelper
     {
         var daysSince = DateTime.UtcNow.Subtract(date).Days;
 
-        if(daysSince < 7)
+        if (daysSince < 7)
         {
             return $"hace {daysSince} días a las {date.Hour}:{date.Minute}";
         }

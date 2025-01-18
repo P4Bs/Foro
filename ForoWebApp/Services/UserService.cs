@@ -1,4 +1,4 @@
-﻿using ForoWebApp.Database;
+using ForoWebApp.Database;
 using ForoWebApp.Database.Documents;
 using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Models.Requests;
@@ -9,50 +9,50 @@ namespace ForoWebApp.Services;
 public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 {
     private readonly UnitOfWork _unitOfWork = unitOfWork;
-	private readonly IPasswordHelper _passwordHelper = passwordHelper;
+    private readonly IPasswordHelper _passwordHelper = passwordHelper;
 
-	public async Task<RegistrationResult> RegisterUser(UserRegistrationRequest model)
-	{
-		IList<string> validationErrors = [];
+    public async Task<RegistrationResult> RegisterUser(UserRegistrationRequest model)
+    {
+        IList<string> validationErrors = [];
         var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);
 
-		if (existingUser != null)
-		{
-			validationErrors.Add("Ya existe un usuario registrado con este correo electrónico");
+        if (existingUser != null)
+        {
+            validationErrors.Add("Ya existe un usuario registrado con este correo electrónico");
             return new RegistrationResult(success: false, errors: validationErrors);
-		}
+        }
 
-		User newUser = new()
-		{
-			Name = model.Username,
-			Email = model.Email,
-			RegisteredAt = DateTime.UtcNow,
-			Role = "user"
+        User newUser = new()
+        {
+            Name = model.Username,
+            Email = model.Email,
+            RegisteredAt = DateTime.UtcNow,
+            Role = "user"
         };
 
-		var hashedPassword = _passwordHelper.HashPassword(newUser, model.Password);
-		newUser.Password = hashedPassword;
+        var hashedPassword = _passwordHelper.HashPassword(newUser, model.Password);
+        newUser.Password = hashedPassword;
 
-		bool success = await _unitOfWork.UsersRepository.TryRegister(newUser);
+        bool success = await _unitOfWork.UsersRepository.TryRegister(newUser);
 
-		if (!success)
-		{
-			validationErrors.Add("No se pudo registrar al usuario. Intentelo de nuevo pasado un momento");
+        if (!success)
+        {
+            validationErrors.Add("No se pudo registrar al usuario. Intentelo de nuevo pasado un momento");
             return new RegistrationResult(success: false, errors: validationErrors);
-		}
+        }
 
-		return new RegistrationResult(success: true, newUser);
+        return new RegistrationResult(success: true, newUser);
     }
 
-	public async Task<LoginResult> LogUser(UserLoginRequest model)
-	{
-		User user = await _unitOfWork.UsersRepository.FindUser(model.Email);
+    public async Task<LoginResult> LogUser(UserLoginRequest model)
+    {
+        User user = await _unitOfWork.UsersRepository.FindUser(model.Email);
 
-		if(user == null || !_passwordHelper.VerifyPassword(user, user.Password, model.Password))
-		{
-			return new LoginResult(success: false, errors: ["El correo electrónico o la contraseña introducidos no son correctos"]);
-		}
+        if (user == null || !_passwordHelper.VerifyPassword(user, user.Password, model.Password))
+        {
+            return new LoginResult(success: false, errors: ["El correo electrónico o la contraseña introducidos no son correctos"]);
+        }
 
-		return new LoginResult(success: true, user);
-	}
+        return new LoginResult(success: true, user);
+    }
 }

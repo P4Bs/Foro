@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace ForoWebApp.Validators;
 
@@ -6,7 +6,7 @@ public partial class PasswordValidator
 {
     public static IEnumerable<string> ValidatePassword(string password, string repeatedPassword)
     {
-        if(password != repeatedPassword)
+        if (password != repeatedPassword)
         {
             yield return "Las contraseñas no coinciden";
         }

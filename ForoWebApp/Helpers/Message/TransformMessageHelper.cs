@@ -1,4 +1,4 @@
-﻿namespace ForoWebApp.Helpers.Message;
+namespace ForoWebApp.Helpers.Message;
 
 public static class TransformMessageHelper
 {
