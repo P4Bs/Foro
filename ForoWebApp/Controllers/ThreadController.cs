@@ -1,5 +1,6 @@
 ﻿using ForoWebApp.Database.Documents;
 using ForoWebApp.Models;
+using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,17 +10,17 @@ using System.Security.Claims;
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService, MessageService messageService) : Controller
+public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService, PostService postService) : Controller
 {
 	private readonly ILogger<ThreadController> _logger = logger;
 	private readonly ThreadService _threadService = threadService;
-	private readonly MessageService _messageService = messageService;
+	private readonly PostService _postService = postService;
 
 	[AllowAnonymous]
 	[HttpGet("{id}")]
 	public async Task<IActionResult> Index(string id)
 	{
-		ThreadViewModel threadViewModel = await _threadService.GetThreadMessages(id);
+		ThreadViewModel threadViewModel = await _threadService.GetThreadPosts(id);
 		return View(threadViewModel);
 	}
 
@@ -30,8 +31,8 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
     }
 
 	[Authorize]
-    [HttpPost]
-	public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadData newThreadData)
+    [HttpPost("create")]
+	public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadRequest request)
 	{
         string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
@@ -43,7 +44,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         ForumThread newThread = new()
 		{
 			ThemeId = themeId,
-			Title = newThreadData.Title,
+			Title = request.Title,
 			CreatedAt = DateTime.UtcNow,
 			IsClosed = false,
 			ClosureDate = null
@@ -61,18 +62,18 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 			throw;
 		}
         
-		Message newMessage = new()
+		Post newPost = new()
 		{
 			ThreadId = threadId,
 			UserId = userId,
-            Content = newThreadData.MessageContent,
-			PublishingDate = DateTime.UtcNow
+            Content = request.MessageContent,
+			PostDate = DateTime.UtcNow
 		};
 
-		string messageId;
+		string postId;
 		try
 		{
-			messageId = await _messageService.PublishMessage(newMessage);
+			postId = await _postService.PublishPost(newPost);
 		}
 		catch (Exception ex)
 		{

@@ -3,15 +3,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="container">
-    <h1 style="margin-left: 18px;">Temas</h1>
-    <div style="margin-left: 18px;">
+<div id="themes-container">
+    <h1>Temas</h1>
+    <div class="theme-list">
         @foreach (var theme in Model)
         {
             <separator></separator>
             <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-id="@theme.Id">
-                <div class="display: flex, flex-direction: column; margin: 20px 0 20px 0; flex: 1">
-                    <div style="display: flex; flex-direction: column; margin: 20px 0 20px 0; flex: 1">
+                <div class="theme">
+                    <div class="theme-title">
                         <h2 class="theme-title-bold">@theme.Name</h2>
                     </div>
                     <div class="theme-description">@theme.Description</div>

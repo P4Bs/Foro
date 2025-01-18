@@ -11,56 +11,64 @@
         return $"/img/carros/{fileName}";
     }
 }
-
-<section style="margin-bottom: 0px;">
-    <div id="thread-name" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
-        <h1 style="margin-bottom: 0px; word-break: break-word; font-size: x-large">@Model.ThreadName</h1>
-    </div>
-</section>
-<section style="margin-top: 0; margin-bottom: 0; padding: 0.5rem;"></section>
-<div id="thread-messages">
-    @foreach (var message in Model.Messages)
-    {
-        <div>
-            <section style="margin: 0; padding: 0 0 6px 8px; flex: 1; border-left: solid 4px #FD5D4D;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px">
-                        <!-- User Profile picture and username-->
-                        <div style="display: flex; align-items: center">
-@*                          <a style="height: 46px; position: relative" asp-controller="User" asp-action="Profile" asp-route-id="@message.UserId">
-                                @if (message.UserProfilePicture == null)
-                                {
-                                    <img style="border-radius: 50%;" src="~/img/default-user-image.jpg" />
-                                }
-                                else 
-                                {
-                                    <img style="border-radius: 50%;" src="@ImageToBase64(message.UserProfilePicture)" />
-                                }
-                            </a> *@
-                            <div id="user-profile-picture" style="height: 50px; position: relative">
-                                <img style="border-radius: 10%;" src="@GetCarroPictureSrc()" />
+<div id="thread-container">
+    <section class="without-bottom-corners">
+        <div class="header-flex-container">
+            <h1>@Model.ThreadName</h1>
+            @if(!Model.IsClosed)
+            {
+                <button class="rounded-button" alt="Crear Post" onclick="location.href='@Url.Action("NewPost","Posts", new { })'">
+                    <span class="inner-buttom-text">Crear post</span>
+                </button>
+            }
+            else
+            {
+                
+            }
+        </div>
+    </section>
+    <div id="thread-posts">
+        @foreach (var message in Model.Posts)
+        {
+            <div>
+                <section class="post-container">
+                    <div>
+                        <div class="message-header">
+                            <!-- User profile picture and name-->
+                            <div class="user-container">
+                                <div id="user-profile-picture">
+                                    <img class="user-profile-image" src="@GetCarroPictureSrc()" />
+                                </div>
+                                <div id="user-name-container">
+                                    <div>
+                                        <span class="user-name-text">@@@message.UserName</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="user-name" style="display: flex; flex-direction: column; margin-left: 28px">
-                                <div>
-@*                                  <a style="font-size: 1rem; color: #FD5D4D; font-weight: bold" asp-controller="User" asp-action="Profile" asp-route-id="@message.UserId">
-                                        @message.UserName
-                                    </a> *@
-                                    <span style="font-size: 1.5rem; color: #FD5D4D; font-weight: bold">@message.UserName</span>
+                            <!-- Post date -->
+                            <div class="post-date-container user-element-right">
+                                <div id="post-date" title="@message.PostDate.ToString("yyyy/MM/dd - HH:mm")">
+                                    <span class="post-date-text">
+                                        Publicado @DateFormatHelper.FormatDate(message.PostDate)
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <!-- Publishing date -->
-                        <div style="display: flex; flex-direction: column; align-items: flex-end">
-                            <div id="message-publish-date" style="display: flex; flex-direction: row; align-items: center; margin-bottom: 4px">
-                                <span style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; color: #949494; font-size: large;">
-                                    Publicado @DateFormatHelper.FormatDate(message.PublishingDate)
-                                </span>
-                            </div>
+                        <separator class="post-separator"></separator>
+                        <div id="post-message">
+                            <table class="message-table">
+                                <tbody>
+                                    <tr style="font-size: 1rem; width: 100%">
+                                        <td style="font-size: 1rem; width: 100%">
+                                            @Html.Raw(message.Message)
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
-                <separator style="margin-bottom: 14px"></separator>
-            </section>
-        </div>
-    }
+                </section>
+            </div>
+        }
+    </div>
 </div>

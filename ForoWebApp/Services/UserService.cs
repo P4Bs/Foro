@@ -1,7 +1,8 @@
 ﻿using ForoWebApp.Database;
 using ForoWebApp.Database.Documents;
 using ForoWebApp.Helpers.Passwords;
-using ForoWebApp.Models;
+using ForoWebApp.Models.Requests;
+using ForoWebApp.Models.Results;
 
 namespace ForoWebApp.Services;
 
@@ -10,7 +11,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
     private readonly UnitOfWork _unitOfWork = unitOfWork;
 	private readonly IPasswordHelper _passwordHelper = passwordHelper;
 
-	public async Task<RegistrationResult> RegisterUser(UserRegistrationModel model)
+	public async Task<RegistrationResult> RegisterUser(UserRegistrationRequest model)
 	{
 		IList<string> validationErrors = [];
         var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);
@@ -43,7 +44,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
 		return new RegistrationResult(success: true, newUser);
     }
 
-	public async Task<LoginResult> LogUser(UserLoginModel model)
+	public async Task<LoginResult> LogUser(UserLoginRequest model)
 	{
 		User user = await _unitOfWork.UsersRepository.FindUser(model.Email);
 

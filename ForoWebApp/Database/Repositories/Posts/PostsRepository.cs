@@ -1,11 +1,11 @@
 ﻿using ForoWebApp.Database.Documents;
 
-namespace ForoWebApp.Database.Repositories.Messages;
+namespace ForoWebApp.Database.Repositories.Posts;
 
-public class MessagesRepository(DbContext dbContext) : GenericRepository<Message>(dbContext.Messages)
+public class PostsRepository(DbContext dbContext) : GenericRepository<Post>(dbContext.Posts)
 {
 
-	/*
+    /*
 	private readonly UnitOfWork _unitOfWork;
 
 	public async Task<int> InsertOneAsync(Message message)

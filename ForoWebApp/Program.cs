@@ -28,7 +28,7 @@ builder.Services.AddScoped<UnitOfWork>();
 #region Entity Services
 builder.Services.AddScoped<ThemeService>();
 builder.Services.AddScoped<ThreadService>();
-builder.Services.AddScoped<MessageService>();
+builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
 #endregion
 

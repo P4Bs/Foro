@@ -1,0 +1,167 @@
+﻿/* General container styles */
+#thread-container {
+    width: 100%;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px
+}
+
+/* Section with removed bottom corners */
+.without-bottom-corners {
+    margin-bottom: 8px;
+}
+
+/* Flex container for header */
+.header-flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rounded-button {
+    /* Sizing and dimensions */
+    height: 46px;
+    max-width: 250px;
+    padding: 12px 24px;
+    border-radius: 32px;
+    /* Typography */
+    font-size: 0.75rem; /* Smaller font size for compact text */
+    text-transform: uppercase; /* Make text uppercase */
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    /* Colors and background */
+    background: #FD5D4D; /* Button background color */
+    color: white; /* Text color */
+    border: 1px solid #FD5D4D; /* Match border to background color */
+    /* Interactivity */
+    cursor: pointer;
+    transition: all 0.2s; /* Smooth transition for hover effects */
+    /* Layout */
+    display: block; /* Ensure button behaves as a block element */
+    text-decoration: none; /* Remove underline from text links */
+}
+
+/* Button text styles */
+.inner-buttom-text {
+    font-weight: bold;
+}
+
+.post-container {
+    margin: 0;
+    padding: 0 0 6px 8px;
+    flex: 1;
+    border-left: solid 4px #FD5D4D;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px
+}
+
+.user-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+#user-profile-picture {
+    height: 68px;
+    position: relative;
+}
+
+.user-profile-image {
+    border-radius: 10%;
+}
+
+#user-name-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 28px;
+}
+
+.user-name-text {
+    font-size: 1.5rem;
+    color: #FD5D4D;
+    font-weight: bold;
+}
+
+/* Contenedor del post-date */
+.post-date-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.user-element-right{
+    margin-left: auto;
+}
+
+/* Configuración básica */
+#post-date {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+    position: relative; /* Necesario para el tooltip */
+}
+
+/* Texto principal */
+.post-date-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    color: #949494;
+    font-size: large;
+}
+
+/* Tooltip personalizado */
+#post-date:hover::after {
+    content: attr(title); /* Usa el atributo title para mostrar la fecha completa */
+    position: absolute;
+    top: 120%; /* Muestra el tooltip justo debajo del elemento */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333; /* Fondo del tooltip */
+    color: #fff; /* Color del texto */
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Evita que el atributo title predeterminado del navegador interfiera */
+#post-date[title] {
+    position: relative;
+}
+
+#post-date[title]:hover {
+    cursor: pointer; /* Opcional: cambia el cursor al pasar por encima */
+}
+
+.post-separator {
+    transition: all 0.2s;
+    width: 100%;
+    background-color: #ececec;
+    height: 1px;
+    display: block;
+    margin-bottom: 14px
+}
+
+#post-message {
+    letter-spacing: 0.02px;
+    line-height: 1.2;
+}
+
+.message-table {
+    width: 100%;
+}
+

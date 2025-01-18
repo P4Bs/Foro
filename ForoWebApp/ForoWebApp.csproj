@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\Enums\" />
     <Folder Include="wwwroot\img\carros\" />
   </ItemGroup>
 

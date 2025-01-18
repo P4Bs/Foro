@@ -4,7 +4,6 @@ namespace ForoWebApp.Database.Repositories.Threads;
 
 public class ThreadsRepository(DbContext dbContext) : GenericRepository<ForumThread>(dbContext.Threads)
 {
-
     /*
 	public async Task<int> InsertOneAsync(Thread thread)
 	{
@@ -29,5 +28,4 @@ public class ThreadsRepository(DbContext dbContext) : GenericRepository<ForumThr
 			update: Builders<Thread>.Update.Combine(closureUpdates)
 		);
 	}*/
-
 }
