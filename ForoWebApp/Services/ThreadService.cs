@@ -14,33 +14,34 @@ public class ThreadService(UnitOfWork unitOfWork)
 		return _unitOfWork.ThreadsRepository.InsertAsync(thread);
 	}
 
-	public Task<ThreadViewModel> GetThreadMessages(string threadId)
+	public Task<ThreadViewModel> GetThreadPosts(string threadId)
 	{
-		var messageCollection = _unitOfWork.MessagesRepository.GetCollectionAsQueryable();
+		var postsCollection = _unitOfWork.PostsRepository.GetCollectionAsQueryable();
 		var threadsCollection = _unitOfWork.ThreadsRepository.GetCollectionAsQueryable();
 		var usersCollection = _unitOfWork.UsersRepository.GetCollectionAsQueryable();
 
-		var messagesQuery = from thread in threadsCollection
-							join message in messageCollection on thread.Id equals message.ThreadId
-							join user in usersCollection on message.UserId equals user.Id
+		var postsQuery = from thread in threadsCollection
+							join post in postsCollection on thread.Id equals post.ThreadId
+							join user in usersCollection on post.UserId equals user.Id
 							where thread.Id == threadId
-							group new { message, user } by thread into groupedThread
+							group new { post, user } by thread into groupedThread
 							select new ThreadViewModel
 							{
 								ThreadId = groupedThread.Key.Id,
 								ThreadName = groupedThread.Key.Title,
-								Messages = groupedThread.AsQueryable().Select(
-									groupedMessage => new MessageViewModel
+								IsClosed = groupedThread.Key.IsClosed,
+								Posts = groupedThread.AsQueryable().Select(
+									groupedMessage => new PostData
 									{
-										Id = groupedMessage.message.Id,
+										Id = groupedMessage.post.Id,
 										UserId = groupedMessage.user.Id,
 										UserName = groupedMessage.user.Name,
-										Content = groupedMessage.message.Content,
-										PublishingDate = groupedMessage.message.PublishingDate,
+										Message = groupedMessage.post.Content,
+										PostDate = groupedMessage.post.PostDate,
 									}
 								)
 							};
 
-		return messagesQuery.FirstOrDefaultAsync();
+		return postsQuery.FirstOrDefaultAsync();
 	}
 }

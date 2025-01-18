@@ -1,7 +1,8 @@
 ﻿using ForoWebApp.Builders;
 using ForoWebApp.Database.Documents;
 using ForoWebApp.Managers;
-using ForoWebApp.Models;
+using ForoWebApp.Models.Requests;
+using ForoWebApp.Models.Results;
 using ForoWebApp.Services;
 using ForoWebApp.Validators;
 using Microsoft.AspNetCore.Authentication;
@@ -39,15 +40,15 @@ public class UserController(ILogger<UserController> logger, UserService userServ
 	}
 
 	[HttpPost("RegisterUser")]
-	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationModel model)
+	public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationRequest request)
 	{
 		if (!ModelState.IsValid)
 		{
-			return View("Register", model);
+			return View("Register", request);
 		}
 
 		// PASSWORD VALIDATION
-		var passwordErrors = PasswordValidator.ValidatePassword(model.Password, model.RepeatedPassword);
+		var passwordErrors = PasswordValidator.ValidatePassword(request.Password, request.RepeatedPassword);
 
 		if (passwordErrors.Any())
 		{
@@ -55,10 +56,10 @@ public class UserController(ILogger<UserController> logger, UserService userServ
             {
                 ModelState.AddModelError("Password", error);
             }
-            return View("Register", model);
+            return View("Register", request);
         }
 
-        RegistrationResult result = await _userService.RegisterUser(model);
+        RegistrationResult result = await _userService.RegisterUser(request);
 
 		if (!result.Success)
 		{
@@ -67,7 +68,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
             {
                 ModelState.AddModelError("Email", error);
             }
-			return View("Register", model);
+			return View("Register", request);
 		}
 
 		(ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
@@ -78,14 +79,14 @@ public class UserController(ILogger<UserController> logger, UserService userServ
     }
 
 	[HttpPost("LogUser")]
-	public async Task<IActionResult> LogUser([FromForm] UserLoginModel model)
+	public async Task<IActionResult> LogUser([FromForm] UserLoginRequest request)
 	{
 		if (!ModelState.IsValid)
 		{
-			return View("Login", model);
+			return View("Login", request);
 		}
 
-		LoginResult result = await _userService.LogUser(model);
+		LoginResult result = await _userService.LogUser(request);
 
 		if (!result.Success)
 		{
@@ -93,7 +94,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
             {
                 ModelState.AddModelError("Email", error);
             }
-			return View("Login", model);
+			return View("Login", request);
 		}
 
         (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);

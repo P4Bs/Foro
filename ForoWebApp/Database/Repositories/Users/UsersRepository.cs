@@ -1,5 +1,4 @@
 ﻿using ForoWebApp.Database.Documents;
-using ForoWebApp.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 

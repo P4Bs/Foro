@@ -22,9 +22,6 @@ public class ForumThread : IDocument
 	[BsonElement("lastUpdateAt")]
 	public DateTime LastUpdateAt { get; set; }
 
-    [BsonElement("lastUpdateMessageId")]
-    public string LastUpdateMessageId { get; set; }
-
     [BsonElement("lastUpdateUsername")]
 	public string LastUpdateUsername { get; set; }
 

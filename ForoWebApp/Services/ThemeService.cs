@@ -31,11 +31,10 @@ public class ThemeService(UnitOfWork unitOfWork)
                          {
                              Id = thread.Id,
                              Title = thread.Title,
-                             LastMessageId = thread.LastUpdateMessageId,
                              LastUpdatedAt = thread.LastUpdateAt,
                              LastUpdateUsername = thread.LastUpdateUsername,
                              TotalMessages = thread.TotalMessages
-                         }).ToList()
+                         })
                      };
 
         return threadsQueryable.FirstAsync();

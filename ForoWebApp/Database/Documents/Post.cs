@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ForoWebApp.Database.Documents;
 
-public class Message : IDocument
+public class Post : IDocument
 {
 	[BsonId]
 	[BsonRepresentation(BsonType.ObjectId)]
@@ -20,6 +20,6 @@ public class Message : IDocument
 	[BsonElement("content")]
 	public string Content { get; set; }
 
-	[BsonElement("publishingDate")]
-	public DateTime PublishingDate { get; set; }
+	[BsonElement("postDate")]
+	public DateTime PostDate { get; set; }
 }

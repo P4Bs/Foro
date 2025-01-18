@@ -1,12 +1,20 @@
-﻿container {
+﻿#themes-container {
     display: block;
+    width: 100%;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px
 }
 
-container.h1 {
-
+#themes-container.h1 {
+    margin-left: 18px;
 }
 
-separator{
+.theme-list {
+    margin-left: 18px;
+}
+
+separator {
     width: 100%;
     background-color: black;
     height: 1px;
@@ -14,14 +22,28 @@ separator{
     transition: all 0.2s;
 }
 
+.theme {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 20px 0;
+    flex: 1
+}
+
+.theme-title {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 20px 0;
+    flex: 1
+}
+
+.theme-description {
+    color: black;
+}
+
 .theme-title-bold{
     margin: 0;
     font-size: 1.125rem;
     font-weight: bold;
     text-align: left;
-    color: black;
-}
-
-.theme-description{
     color: black;
 }

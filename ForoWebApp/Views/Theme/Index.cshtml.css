@@ -1,6 +1,9 @@
 ﻿/* General container styles */
-#container {
-    margin-bottom: 24px;
+#theme-container {
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px
 }
 
 /* Section with removed bottom corners */

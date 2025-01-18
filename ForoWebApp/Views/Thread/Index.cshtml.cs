@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-namespace ForoWebApp.Views.Threads;
+namespace ForoWebApp.Views.Thread;
 
 public class ThreadViewUtils
 {
