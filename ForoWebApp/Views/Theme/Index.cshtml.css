@@ -1,26 +1,44 @@
-﻿/* General container styles */
-#theme-container {
-    width: 100%;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none !important;
+    color: inherit;
 }
 
-/* Section with removed bottom corners */
-.without-bottom-corners {
-    margin-bottom: 24px;
+/* General container styles */
+#theme-container {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+}
+
+    #theme-container > #theme-header {
+        padding: 24px;
+        border-radius: 20px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+#theme-header {
+    padding-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
 }
 
 /* Flex container for header */
 .header-flex-container {
-    margin-left: 24px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-left: 12px;
 }
 
-.rounded-button {
+.new-thread-button {
     /* Sizing and dimensions */
     height: 46px;
     max-width: 250px;
@@ -55,38 +73,25 @@
     font-weight: bold;
 }
 
-/* Flex container for thread section */
-.thread-section-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #333333;
-    margin: 0 10px;
-}
-
-/* Black ribbon title */
-.black-ribbon-title {
-    padding: 9px 16px;
-    margin: 0;
-    flex: 1;
-    color: white;
-    font-size: 1.125rem;
-}
-
 /* Thread item container */
 .thread-item-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0 12px 0 24px;
+    width: 100%;
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box; /* Asegura que el padding no desborde el contenedor */
+    border-radius: 8px;
 }
 
 /* Thread details container */
 .thread-details {
     display: flex;
     flex: 7;
-    padding: 0 10px 0 14px;
     flex-direction: column;
+    padding: 10px;
 }
 
 /* Thread title */
@@ -102,20 +107,35 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 4px 0;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.thread-metadata-text {
+    color: black;
+}
+
+.message-counter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 }
 
-/* Separator styles */
-.separator {
-    height: 4px;
-    background-color: #f5f5f5;
+
+.total-messages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    color: #a4a4a4;
+    min-width: 34px;
+    text-align: right;
+    margin-left: 3px;
 }
 
-a,
-a:link,
-a:visited,
-a:hover,
-a:active {
-    text-decoration: none;
+#mesagge-counter{
+    color: lightgray;
 }
+
+

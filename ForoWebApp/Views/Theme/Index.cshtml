@@ -1,45 +1,53 @@
-﻿@model ThemeViewModel
+@model ThemeViewModel
 @{
     ViewData["Title"] = "Theme";
 }
 
 <div id="theme-container">
-    <section class="without-bottom-corners">
+    <section id="theme-header">
         <div class="header-flex-container">
             <h1>@Model.ThemeTitle</h1>
-            <button class="rounded-button" alt="Crear Nuevo Hilo" onclick="location.href='@Url.Action("NewThread","Thread", new { themeId = Model.ThemeId })'">
+            <button class="new-thread-button" alt="Crear Nuevo Hilo" onclick="location.href='@Url.Action("NewThread","Thread", new { themeId = Model.ThemeId })'">
                 <span class="inner-buttom-text">Nuevo Hilo</span>
             </button>
         </div>
     </section>
 
-    <div class="thread-section-container">
+@*     <div class="thread-section-container">
         <h1 class="black-ribbon-title">Hilos</h1>
-    </div>
+    </div> *@
 
     <section>
         @foreach (var thread in Model.Threads)
         {
             <div class="thread-item-container">
                 <div class="thread-details">
-                    <span class="thread-title">
-                        <a asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id" style="text-decoration: none;">
+                    <a style="text-decoration: none;" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id">
+                        <span class="thread-title">
                             @thread.Title
-                        </a>
-                    </span>
+                        </span>
+                    </a>
+                    
                     <div class="thread-metadata">
-                        <a asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id" style="text-decoration: none;">
-                            <span class="thread-title">
-                                @thread.LastUpdateUsername - Actualizado @DateFormatHelper.FormatDate(thread.LastUpdatedAt)
+                        <a style="text-decoration: none" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id">
+                            <span class="thread-metadata-text">
+                                Actualizado @DateFormatHelper.FormatDate(thread.LastUpdatedAt)
                             </span>
                         </a>
-                        <div style="display: flex; flex-direction: row; align-items: center; gap: 12px;">
-                            <!-- Additional metadata if needed -->
-                        </div>
                     </div>
                 </div>
+                <div class="message-counter">
+                    <img src="~/img/generic/citas.svg"/>
+                    <div class="total-messages">
+                        <a style="margin-left: 3px; color: #a4a4a4; min-width: 34px; text-align: right; text-decoration: none;" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id" style="text-decoration: none;">
+                            <span id="message-counter">
+                                @thread.TotalMessages
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
             </div>
-            <div class="separator"></div>
         }
     </section>
 </div>

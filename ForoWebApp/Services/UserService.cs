@@ -11,7 +11,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
     private readonly UnitOfWork _unitOfWork = unitOfWork;
     private readonly IPasswordHelper _passwordHelper = passwordHelper;
 
-    public async Task<RegistrationResult> RegisterUser(UserRegistrationRequest model)
+    public async Task<RegistrationResult> RegisterUser(RegisterUserRequest model)
     {
         IList<string> validationErrors = [];
         var existingUser = await _unitOfWork.UsersRepository.FindUser(model.Email);

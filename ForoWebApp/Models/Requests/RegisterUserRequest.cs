@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ForoWebApp.Models.Requests;
 
-public class UserRegistrationRequest
+public class RegisterUserRequest
 {
     [StringLength(30, MinimumLength = 4, ErrorMessage = "El nombre de usuario ha de tener un mínimo de 4 y máximo de 30 carácteres")]
     [Required(ErrorMessage = "El campo de nombre de usuario es obligatorio")]

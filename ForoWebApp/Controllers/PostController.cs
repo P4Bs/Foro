@@ -36,6 +36,7 @@ public class PostController(ILogger<PostController> logger, PostService postServ
         try
         {
             postId = await _postService.PublishPost(newPost);
+            newPost.Id = postId;
         }
         catch (Exception)
         {
