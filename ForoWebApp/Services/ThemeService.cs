@@ -18,24 +18,29 @@ public class ThemeService(UnitOfWork unitOfWork)
     {
         var threadCollection = _unitOfWork.ThreadsRepository.GetCollectionAsQueryable();
         var themeCollection = _unitOfWork.ThemesRepository.GetCollectionAsQueryable();
+        var postsCollection = _unitOfWork.PostsRepository.GetCollectionAsQueryable();
+        var usersCollection = _unitOfWork.UsersRepository.GetCollectionAsQueryable();
 
-        var threadsQueryable = from theme in themeCollection
-                               join thread in threadCollection on theme.Id equals thread.ThemeId
-                               where theme.Id == themeId
-                               group thread by theme into groupedTheme
-                               select new ThemeViewModel
-                               {
-                                   ThemeId = groupedTheme.Key.Id,
-                                   ThemeTitle = groupedTheme.Key.Name,
-                                   Threads = groupedTheme.Select(thread => new ThreadData
-                                   {
-                                       Id = thread.Id,
-                                       Title = thread.Title,
-                                       LastUpdatedAt = thread.LastUpdateAt,
-                                       LastUpdateUsername = thread.LastUpdateUsername,
-                                       TotalMessages = thread.TotalMessages
-                                   })
-                               };
+        var threadsQueryable =
+            from theme in themeCollection
+            join thread in threadCollection on theme.Id equals thread.ThemeId
+            join post in postsCollection on thread.Id equals post.ThreadId into postsGroup
+            where theme.Id == themeId
+            group new { thread, postsGroup } by theme into groupedTheme
+            select new ThemeViewModel
+            {
+                ThemeId = groupedTheme.Key.Id,
+                ThemeTitle = groupedTheme.Key.Name,
+                Threads = groupedTheme.AsQueryable().Select(
+                    groupedThreads => new ThreadData
+                    {
+                        Id = groupedThreads.thread.Id,
+                        Title = groupedThreads.thread.Title,
+                        LastUpdatedAt = groupedThreads.postsGroup.OrderByDescending(post => post.PostDate).First().PostDate,
+                        TotalMessages = groupedThreads.postsGroup.Count()
+                    }
+                )
+            };
 
         return threadsQueryable.FirstAsync();
     }

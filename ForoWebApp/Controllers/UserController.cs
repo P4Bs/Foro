@@ -40,7 +40,7 @@ public class UserController(ILogger<UserController> logger, UserService userServ
     }
 
     [HttpPost("RegisterUser")]
-    public async Task<IActionResult> RegisterUser([FromForm] UserRegistrationRequest request)
+    public async Task<IActionResult> RegisterUser([FromForm] RegisterUserRequest request)
     {
         if (!ModelState.IsValid)
         {

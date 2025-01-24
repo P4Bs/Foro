@@ -1,22 +1,23 @@
-﻿@model IList<Theme>
+@model IList<Theme>
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div id="themes-container">
+<div id="home-container">
     <h1>Temas</h1>
-    <div class="theme-list">
+    <div id="themes-list">
         @foreach (var theme in Model)
         {
-            <separator></separator>
-            <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-id="@theme.Id">
-                <div class="theme">
-                    <div class="theme-title">
-                        <h2 class="theme-title-bold">@theme.Name</h2>
+            <div class="theme-details">
+                <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-id="@theme.Id">
+                    <div class="theme">
+                        <div class="theme-title">
+                            <h2 class="theme-title-bold">@theme.Name</h2>
+                        </div>
+                        <div class="theme-description">@theme.Description</div>
                     </div>
-                    <div class="theme-description">@theme.Description</div>
-                </div>
-            </a>
+                </a>
+            </div>
         }
     </div>
 </div>

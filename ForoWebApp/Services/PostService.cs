@@ -7,8 +7,8 @@ public class PostService(UnitOfWork unitOfWork)
 {
     private readonly UnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<string> PublishPost(Post newMessage)
+    public async Task<string> PublishPost(Post newPost)
     {
-        return await _unitOfWork.PostsRepository.InsertAsync(newMessage);
+        return await _unitOfWork.PostsRepository.InsertAsync(newPost);
     }
 }

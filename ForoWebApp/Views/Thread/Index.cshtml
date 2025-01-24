@@ -1,4 +1,4 @@
-﻿@model ForoWebApp.Models.ViewModels.ThreadViewModel
+@model ForoWebApp.Models.ViewModels.ThreadViewModel
 @{
     ViewData["Title"] = "Thread";
 }
@@ -14,10 +14,10 @@
 <div id="thread-container">
     <section class="without-bottom-corners">
         <div class="header-flex-container">
-            <h1>@Model.ThreadName</h1>
+            <h1 class="thread-title">@Model.ThreadName</h1>
             @if(!Model.IsClosed)
             {
-                <button class="rounded-button" alt="Crear Post" onclick="location.href='@Url.Action("NewPost","Posts", new { })'">
+                <button class="rounded-button" alt="Crear Post" onclick="location.href='@Url.Action("NewPost","Post", new { threadId = Model.ThreadId })'">
                     <span class="inner-buttom-text">Crear post</span>
                 </button>
             }
@@ -30,7 +30,7 @@
     <div id="thread-posts">
         @foreach (var message in Model.Posts)
         {
-            <div>
+            <div class="post-box">
                 <section class="post-container">
                     <div>
                         <div class="message-header">
@@ -45,13 +45,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- Post date -->
-                            <div class="post-date-container user-element-right">
-                                <div id="post-date" title="@message.PostDate.ToString("yyyy/MM/dd - HH:mm")">
-                                    <span class="post-date-text">
-                                        Publicado @DateFormatHelper.FormatDate(message.PostDate)
-                                    </span>
-                                </div>
+                        </div>
+                        <!-- Post date -->
+                        <div class="post-date-container user-element-right">
+                            <div id="post-date" title="@message.PostDate.ToString("yyyy/MM/dd - HH:mm")">
+                                <span class="post-date-text">
+                                    Publicado @DateFormatHelper.FormatDate(message.PostDate)
+                                </span>
                             </div>
                         </div>
                         <separator class="post-separator"></separator>

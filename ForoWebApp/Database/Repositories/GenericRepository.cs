@@ -28,6 +28,11 @@ public abstract class GenericRepository<TDocument> : IGenericRepository<TDocumen
         return GetCollectionAsQueryable().FirstOrDefaultAsync(document => document.Id == id);
     }
 
+    /// <summary>
+    /// Inserts a new document inside the collection
+    /// </summary>
+    /// <param name="document">An object that inherits the interface TDocument</param>
+    /// <returns>The id of the documment inserted</returns>
     public async Task<string> InsertAsync(TDocument document)
     {
         await Collection.InsertOneAsync(document);

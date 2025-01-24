@@ -1,18 +1,29 @@
-﻿@model NewThreadData
+@model NewThreadViewModel
+@{
+    string GetThemeId()
+    {
+        return ViewData["ThemeId"] as string;
+    }
+}
 
-<h1>Crear nuevo hilo</h1>
-<form asp-controller="Thread" asp-action="CreateNewThread" asp-route-themeId="@Model.ThemeId" method="post">
-    <div>
-        <label>Titulo del hilo</label>
-        <input type="text" id="title" name="Title" />
-    </div>
+<div class="title">
+    <h1>Crear nuevo hilo</h1>
+</div>
+<div class="new-thread-container">
+    <form asp-controller="Thread" asp-action="CreateNewThread" asp-route-themeId="@GetThemeId()" id="new-thread-form" method="post" style="display: flex; flex-direction: column;">
+        <!-- Resumen de validación -->
+        <div asp-validation-summary="ModelOnly" style="color: red; margin-bottom: 16px;"></div>
 
-    <div>
-        <label>Mensaje</label>
-        <input type="text" id="messageContent" name="MessageContent" />
-    </div>
+        <label asp-for="Title" style="font-weight: bold; margin-bottom: 8px;">Título</label>
+        <textarea asp-for="Title" type="text" id="title-box" name="Title" value="@Model?.Title" placeholder="Titulo del nuevo hilo"></textarea>
+        <span asp-validation-for="Title" style="color: red; font-size: 14px;"></span>
 
-    <div>
-        <button type="submit">Crear nuevo hilo</button>
-    </div>
-</form>
+        <label asp-for="MessageContent" style="font-weight: bold; margin-top: 16px; margin-bottom: 8px;">Mensaje</label>
+        <textarea asp-for="MessageContent" rows="10" id="message-box" name="MessageContent" placeholder="Pon aquí tu mensaje"></textarea>
+        <span asp-validation-for="MessageContent" style="color: red; font-size: 14px;"></span>
+
+        <div class="submit-button-region">
+            <input type="submit" value="Crear nuevo hilo" class="button" />
+        </div>
+    </form>
+</div>

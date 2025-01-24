@@ -25,15 +25,22 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
     }
 
     [Authorize]
+    [HttpGet]
     public IActionResult NewThread(string themeId)
     {
-        return View(model: new NewThreadData(themeId));
+        ViewData["ThemeId"] = themeId;
+        return View();
     }
 
     [Authorize]
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] CreateThreadRequest request)
+    [HttpPost("create/{themeId}")]
+    public async Task<IActionResult> CreateNewThread(string themeId, [FromForm] NewThreadViewModel threadViewModel)
     {
+        if(!ModelState.IsValid || themeId is null)
+        {
+            return View("NewThread", threadViewModel);
+        }
+
         string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
         {
@@ -44,7 +51,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         ForumThread newThread = new()
         {
             ThemeId = themeId,
-            Title = request.Title,
+            Title = threadViewModel.Title,
             CreatedAt = DateTime.UtcNow,
             IsClosed = false,
             ClosureDate = null
@@ -66,7 +73,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         {
             ThreadId = threadId,
             UserId = userId,
-            Content = request.MessageContent,
+            Content = threadViewModel.MessageContent,
             PostDate = DateTime.UtcNow
         };
 
