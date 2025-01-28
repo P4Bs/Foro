@@ -1,6 +1,26 @@
 @model NewPostViewModel
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    string GetThreadId()
+    {
+        return ViewData["ThreadId"] as string;
+    }
 }
+
+<div class="title">
+    <h1>Crear nuevo post</h1>
+</div>
+<div class="new-post-container">
+    <form asp-controller="Post" asp-action="CreateNewPost" asp-route-threadId="@GetThreadId()" id="new-post-form" method="post" style="display: flex; flex-direction: column;">
+        <!--Resumen de validación-->
+        <div asp-validation-summary="ModelOnly" style="color: red; margin-bottom: 16px;"></div>
+
+        <!--Contenido del mensaje-->
+        <label asp-for="MessageContent" style="font-weight: bold; margin: 16px 0 8px 0;">Mensaje</label>
+        <textarea asp-for="MessageContent" rows="10" id="message-box" name="MessageContent" placeholder="Aquí va tu mensaje"></textarea>
+        <span asp-validation-for="MessageContent" style="color: red; font-size: 14px;"></span>
+
+        <div class="submit-button-region">
+            <input type="submit" value="Crear nuevo hilo" class="button" />
+        </div>
+    </form>
+</div>

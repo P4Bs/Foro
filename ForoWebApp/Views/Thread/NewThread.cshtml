@@ -14,10 +14,12 @@
         <!-- Resumen de validación -->
         <div asp-validation-summary="ModelOnly" style="color: red; margin-bottom: 16px;"></div>
 
+        <!--Titulo del hilo-->
         <label asp-for="Title" style="font-weight: bold; margin-bottom: 8px;">Título</label>
         <textarea asp-for="Title" type="text" id="title-box" name="Title" value="@Model?.Title" placeholder="Titulo del nuevo hilo"></textarea>
         <span asp-validation-for="Title" style="color: red; font-size: 14px;"></span>
 
+        <!--Contenido del hilo-->
         <label asp-for="MessageContent" style="font-weight: bold; margin-top: 16px; margin-bottom: 8px;">Mensaje</label>
         <textarea asp-for="MessageContent" rows="10" id="message-box" name="MessageContent" placeholder="Pon aquí tu mensaje"></textarea>
         <span asp-validation-for="MessageContent" style="color: red; font-size: 14px;"></span>
