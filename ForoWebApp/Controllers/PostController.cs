@@ -16,7 +16,8 @@ public class PostController(ILogger<PostController> logger, PostService postServ
     [Authorize]
     public IActionResult NewPost(string threadId)
     {
-        return View(model: new NewPostViewModel(threadId));
+        ViewData["ThreadId"] = threadId;
+        return View();
     }
 
     [Authorize]

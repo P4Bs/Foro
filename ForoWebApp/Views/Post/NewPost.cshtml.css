@@ -1,0 +1,40 @@
+.title {
+    margin: 20px 0 20px 0;
+}
+
+.new-post-container {
+    width: 100%;
+}
+
+#validation-summary {
+    color: red;
+    margin-bottom: 16px;
+
+}
+
+#title-box {
+    padding: 8px;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.submit-button-region {
+    display: block;
+    height: 100px;
+    margin-top: 30px;
+}
+
+span {
+    color: red;
+    font-size: 14px;
+}
+
+.button {
+    padding: 15px;
+    font-size: 16px;
+    background-color: #FD5D4D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
