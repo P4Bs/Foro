@@ -10,7 +10,7 @@
     <h1>Crear nuevo post</h1>
 </div>
 <div class="new-post-container">
-    <form asp-controller="Post" asp-action="CreateNewPost" asp-route-threadId="@GetThreadId()" id="new-post-form" method="post" style="display: flex; flex-direction: column;">
+    <form asp-controller="Post" asp-action="PublishPostInThread" asp-route-threadId="@GetThreadId()" id="new-post-form" method="post" style="display: flex; flex-direction: column;">
         <!--Resumen de validación-->
         <div asp-validation-summary="ModelOnly" style="color: red; margin-bottom: 16px;"></div>
 
@@ -20,7 +20,7 @@
         <span asp-validation-for="MessageContent" style="color: red; font-size: 14px;"></span>
 
         <div class="submit-button-region">
-            <input type="submit" value="Crear nuevo hilo" class="button" />
+            <input type="submit" value="Publicar mensaje" class="button" />
         </div>
     </form>
 </div>

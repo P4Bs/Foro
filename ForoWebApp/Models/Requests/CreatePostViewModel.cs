@@ -1,11 +1,11 @@
 using ForoWebApp.Helpers.Message;
+using System.ComponentModel.DataAnnotations;
 
 namespace ForoWebApp.Models.Requests;
 
-public class CreatePostRequest
+public class CreatePostViewModel
 {
-    public string ThreadId { get; set; }
-    public string UserId { get; set; }
+    [Required(ErrorMessage = "El mensaje no puede estar vacío")]
     private string messageContent;
     public string MessageContent
     {
