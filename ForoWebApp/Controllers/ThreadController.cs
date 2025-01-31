@@ -85,8 +85,9 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         catch (Exception ex)
         {
             _logger.LogError("{exceptionMessage}", ex.Message);
+            throw;
         }
 
-        return View(threadId);
+        return Redirect($"/thread/{threadId}");
     }
 }

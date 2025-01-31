@@ -4,6 +4,7 @@ using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
@@ -21,13 +22,14 @@ public class PostController(ILogger<PostController> logger, PostService postServ
     }
 
     [Authorize]
-    [HttpPost("publish")]
-    public async Task<IActionResult> PublishPostInThread([FromBody] CreatePostRequest request)
+    [HttpPost("publish/{threadId}")]
+    public async Task<IActionResult> PublishPostInThread(string threadId, [FromBody] CreatePostViewModel request)
     {
+        string userId = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).First().Value;
         Post newPost = new()
         {
-            ThreadId = request.ThreadId,
-            UserId = request.UserId,
+            ThreadId = threadId,
+            UserId = userId,
             Content = request.MessageContent,
             PostDate = DateTime.UtcNow
         };
@@ -44,6 +46,6 @@ public class PostController(ILogger<PostController> logger, PostService postServ
             throw;
         }
 
-        return View(postId);
+        return Redirect($"/thread/{threadId}");
     }
 }

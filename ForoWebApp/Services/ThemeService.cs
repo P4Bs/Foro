@@ -31,17 +31,21 @@ public class ThemeService(UnitOfWork unitOfWork)
             {
                 ThemeId = groupedTheme.Key.Id,
                 ThemeTitle = groupedTheme.Key.Name,
-                Threads = groupedTheme.AsQueryable().Select(
-                    groupedThreads => new ThreadData
+                Threads = groupedTheme.AsQueryable().Select(groupedThreads => new
                     {
-                        Id = groupedThreads.thread.Id,
-                        Title = groupedThreads.thread.Title,
-                        LastUpdatedAt = groupedThreads.postsGroup.OrderByDescending(post => post.PostDate).First().PostDate,
+                        Thread = groupedThreads.thread,
+                        LastUpdateAt = groupedThreads.postsGroup.OrderByDescending(post => post.PostDate).First().PostDate,
                         TotalMessages = groupedThreads.postsGroup.Count()
-                    }
-                )
+                    })
+                    .OrderByDescending(x => x.LastUpdateAt)
+                    .Select(x => new ThreadData
+                    {
+                        Id = x.Thread.Id,
+                        Title = x.Thread.Title,
+                        LastUpdatedAt = x.LastUpdateAt,
+                        TotalMessages = x.TotalMessages
+                    })
             };
-
         return threadsQueryable.FirstAsync();
     }
 }
