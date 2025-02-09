@@ -39,9 +39,9 @@ public abstract class GenericRepository<TDocument> : IGenericRepository<TDocumen
         return document.Id;
     }
 
-    public async Task UpdateAsync(string id, UpdateDefinition<TDocument>[] documentUpdates)
+    public async Task<UpdateResult> UpdateAsync(string id, UpdateDefinition<TDocument>[] documentUpdates)
     {
-        await Collection.UpdateOneAsync(
+        return await Collection.UpdateOneAsync(
            filter: d => d.Id == id,
            update: Builders<TDocument>.Update.Combine(documentUpdates)
         );

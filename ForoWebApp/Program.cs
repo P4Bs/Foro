@@ -61,6 +61,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 #endregion
 
+#region MediatR
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
+#endregion
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpContextAccessor();

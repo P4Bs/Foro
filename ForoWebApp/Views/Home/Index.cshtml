@@ -1,4 +1,4 @@
-@model IList<Theme>
+@model HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -6,7 +6,7 @@
 <div id="home-container">
     <h1>Temas</h1>
     <div id="themes-list">
-        @foreach (var theme in Model)
+        @foreach (var theme in Model.Themes)
         {
             <div class="theme-details">
                 <a style="display: block; text-decoration: none" asp-controller="Theme" asp-action="Index" asp-route-id="@theme.Id">

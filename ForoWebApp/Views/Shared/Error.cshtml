@@ -1,17 +1,30 @@
-﻿@model ErrorViewModel
+@model ErrorViewModel
 @{
     ViewData["Title"] = "Error";
 }
 
 <h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+@if (String.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <h2 class="text-danger">@Model.ErrorMessage</h2>
+}
+else
+{
+    <h2 class="text-danger">Ocurrio un error al procesar tu petición.</h2>
+}
 
 @if (Model.ShowRequestId)
 {
     <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        <strong>ID de la petición:</strong> <code>@Model.RequestId</code>
     </p>
 }
+
+<div class="back-home-button">
+    <a asp-controller="Home" asp-action="Index">
+        Volver a la pagina principal
+    </a>
+</div>
 
 <h3>Development Mode</h3>
 <p>

@@ -1,6 +1,5 @@
+using ForoWebApp.Database.Constants;
 using ForoWebApp.Database.Documents;
-using ForoWebApp.Models;
-using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +17,9 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Index(string id)
+    public async Task<IActionResult> Index(string id, [FromQuery] int? pageNumber)
     {
-        ThreadViewModel threadViewModel = await _threadService.GetThreadPosts(id);
+        ThreadViewModel threadViewModel = await _threadService.GetThreadPosts(id, pageNumber);
         return View(threadViewModel);
     }
 
@@ -44,7 +43,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userId == null)
         {
-            _logger.LogError("No se pudo obtener el id del usuario");
+            _logger.LogError("No se pudo obtener el id del usuario logado");
             return Unauthorized();
         }
 
@@ -52,7 +51,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         {
             ThemeId = themeId,
             Title = threadViewModel.Title,
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(Constants.CentralEuropeanTimezoneID)),
             IsClosed = false,
             ClosureDate = null
         };
@@ -65,7 +64,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         }
         catch (Exception ex)
         {
-            _logger.LogError("{exceptionMessage}", ex.Message);
+            _logger.LogError("Se capturo una excepción al crear el hilo: {exceptionMessage}", ex.Message);
             throw;
         }
 
@@ -74,7 +73,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
             ThreadId = threadId,
             UserId = userId,
             Content = threadViewModel.MessageContent,
-            PostDate = DateTime.UtcNow
+            PostDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(Constants.CentralEuropeanTimezoneID))
         };
 
         string postId;
@@ -84,10 +83,32 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
         }
         catch (Exception ex)
         {
-            _logger.LogError("{exceptionMessage}", ex.Message);
+            _logger.LogError("Se capturo una excepción al publicar el primer mensaje: {exceptionMessage}", ex.Message);
             throw;
         }
 
         return Redirect($"/thread/{threadId}");
+    }
+
+    [Authorize]
+    [HttpPost("close/{threadId}")]
+    public async Task<IActionResult> CloseThread(string threadId)
+    {
+        bool success;
+        try
+        {
+            success = await _threadService.CloseThread(threadId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Se capturo una excepción al cerrar el hilo: {exceptionMessage}", ex.Message);
+            throw;
+        }
+
+        if (success)
+        {
+            return StatusCode(205, "El hilo se ha cerrado correctamente");
+        }
+        return StatusCode(205, "Ocurrio un error al intentar cerrar el hilo");
     }
 }

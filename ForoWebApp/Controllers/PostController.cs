@@ -1,18 +1,19 @@
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Features.Posts.PublishPost;
 using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.ViewModels;
 using ForoWebApp.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class PostController(ILogger<PostController> logger, PostService postService) : Controller
+public class PostController(IMediator mediator) : Controller
 {
-    private readonly ILogger<PostController> _logger = logger;
-    private readonly PostService _postService = postService;
+    private readonly IMediator _mediator = mediator;
 
     [Authorize]
     public IActionResult NewPost(string threadId)
@@ -23,29 +24,22 @@ public class PostController(ILogger<PostController> logger, PostService postServ
 
     [Authorize]
     [HttpPost("publish/{threadId}")]
-    public async Task<IActionResult> PublishPostInThread(string threadId, [FromBody] CreatePostViewModel request)
+    public async Task<IActionResult> PublishPostInThread(string threadId, [FromForm] CreatePostViewModel request)
     {
-        string userId = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).First().Value;
-        Post newPost = new()
+        var publishPostRequest = new PublishPostRequest
         {
             ThreadId = threadId,
-            UserId = userId,
-            Content = request.MessageContent,
-            PostDate = DateTime.UtcNow
+            UserId = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).First().Value,
+            PostContent = request.MessageContent
         };
 
-        string postId;
+        var response = await _mediator.Send(publishPostRequest);
 
-        try
+        if (response.Success)
         {
-            postId = await _postService.PublishPost(newPost);
-            newPost.Id = postId;
+            return Redirect($"/thread/{threadId}");
         }
-        catch (Exception)
-        {
-            throw;
-        }
-
-        return Redirect($"/thread/{threadId}");
+        return View("Error",
+            new ErrorViewModel(requestId: Activity.Current?.Id ?? HttpContext.TraceIdentifier, errorMessage: response.Message));
     }
 }
