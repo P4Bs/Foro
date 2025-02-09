@@ -36,11 +36,11 @@
                         </a>
                     </div>
                 </div>
-                <div class="message-counter">
+                <div class="message-section">
                     <img src="~/img/generic/citas.svg"/>
                     <div class="total-messages">
-                        <a style="margin-left: 3px; color: #a4a4a4; min-width: 34px; text-align: right; text-decoration: none;" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id" style="text-decoration: none;">
-                            <span id="message-counter">
+                        <a style="color: #a4a4a4; text-decoration: none;" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id" style="text-decoration: none;">
+                            <span class="message-counter">
                                 @thread.TotalMessages
                             </span>
                         </a>

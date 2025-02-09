@@ -115,13 +115,12 @@ a:active {
     color: black;
 }
 
-.message-counter {
+.message-section {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
-
 
 .total-messages {
     display: flex;
@@ -134,8 +133,7 @@ a:active {
     margin-left: 3px;
 }
 
-#mesagge-counter{
+.mesagge-counter{
     color: lightgray;
+    font-size: large;
 }
-
-

@@ -7,7 +7,11 @@ public static class DateFormatHelper
         var daysSince = DateTime.UtcNow.Subtract(date).Days;
         var timeString = date.ToString("HH:mm");
 
-        if (daysSince < 7)
+        if (daysSince == 0)
+        {
+            return $"hoy a las {timeString}";
+        }
+        else if (daysSince < 7)
         {
             return $"hace {daysSince} días a las {timeString}";
         }

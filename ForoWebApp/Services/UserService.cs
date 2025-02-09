@@ -3,6 +3,7 @@ using ForoWebApp.Database.Documents;
 using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.Results;
+using ForoWebApp.Models.Static;
 
 namespace ForoWebApp.Services;
 
@@ -27,7 +28,7 @@ public class UserService(UnitOfWork unitOfWork, IPasswordHelper passwordHelper)
             Name = model.Username,
             Email = model.Email,
             RegisteredAt = DateTime.UtcNow,
-            Role = "user"
+            Role = UserRole.USER
         };
 
         var hashedPassword = _passwordHelper.HashPassword(newUser, model.Password);

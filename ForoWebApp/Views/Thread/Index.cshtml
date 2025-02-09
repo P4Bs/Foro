@@ -10,12 +10,21 @@
         string fileName = System.IO.Path.GetFileName(files[randomIndex]);
         return $"/img/carros/{fileName}";
     }
+
+    bool IsUserAdmin()
+    {
+        if(User.Identity.IsAuthenticated){
+            var userRole = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+            return userRole?.Value == UserRole.ADMIN;
+        }
+        return false;
+    }
 }
 <div id="thread-container">
     <section class="without-bottom-corners">
         <div class="header-flex-container">
             <h1 class="thread-title">@Model.ThreadName</h1>
-            @if(!Model.IsClosed)
+            @if (!Model.IsClosed)
             {
                 <button class="rounded-button" alt="Crear Post" onclick="location.href='@Url.Action("NewPost","Post", new { threadId = Model.ThreadId })'">
                     <span class="inner-buttom-text">Crear post</span>
@@ -23,7 +32,13 @@
             }
             else
             {
-                
+
+            }
+            @if(IsUserAdmin() && !Model.IsClosed)
+            {
+                <button class="rounded-button" alt="Cerrar hilo" onclick="location.href='@Url.Action("CloseThread", "Thread", new { threadId = Model.ThreadId })'">
+                    <span class="inner-buttom-text">Cerrar hilo</span>
+                </button>
             }
         </div>
     </section>

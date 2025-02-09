@@ -13,7 +13,7 @@ public interface IGenericRepository<TDocument> where TDocument : IDocument
 
     Task<string> InsertAsync(TDocument document);
 
-    Task UpdateAsync(string id, UpdateDefinition<TDocument>[] document);
+    Task<UpdateResult> UpdateAsync(string id, UpdateDefinition<TDocument>[] document);
 
     Task DeleteAsync(string id);
 }

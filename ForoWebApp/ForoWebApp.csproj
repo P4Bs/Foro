@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="3.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\User\" />
+    <Folder Include="Features\Thread\" />
+    <Folder Include="Features\Theme\" />
     <Folder Include="wwwroot\img\carros\" />
   </ItemGroup>
 
