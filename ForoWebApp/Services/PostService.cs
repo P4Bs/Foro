@@ -1,5 +1,5 @@
 using ForoWebApp.Database;
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Mappers;
 
 namespace ForoWebApp.Services;
 
@@ -7,8 +7,9 @@ public class PostService(UnitOfWork unitOfWork)
 {
     private readonly UnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<string> PublishPost(Post newPost)
+    public Task<string> CreatePost(Models.Domain.Post model)
     {
-        return await _unitOfWork.PostsRepository.InsertAsync(newPost);
+        Database.Documents.Post newPostDocument = PostMapper.ToDatabaseDocument(model);
+        return _unitOfWork.PostsRepository.InsertAsync(newPostDocument);
     }
 }

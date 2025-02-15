@@ -4,9 +4,12 @@
 }
 
 <h1 class="text-danger">Error.</h1>
-@if (String.IsNullOrEmpty(Model.ErrorMessage))
+@if (Model.Errors.Any())
 {
-    <h2 class="text-danger">@Model.ErrorMessage</h2>
+    foreach (var error in Model.Errors)
+    {
+        <h2 class="text-danger">@error</h2>
+    }
 }
 else
 {

@@ -19,9 +19,6 @@ public class ForumThread : IDocument
     [BsonElement("createdAt")]
     public DateTime CreatedAt { get; set; }
 
-    [BsonElement("lastUpdateUsername")]
-    public string LastUpdateUsername { get; set; }
-
     [BsonElement("isClosed")]
     public bool IsClosed { get; set; }
 

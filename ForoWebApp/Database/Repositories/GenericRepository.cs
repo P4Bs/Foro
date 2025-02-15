@@ -4,14 +4,9 @@ using MongoDB.Driver.Linq;
 
 namespace ForoWebApp.Database.Repositories;
 
-public abstract class GenericRepository<TDocument> : IGenericRepository<TDocument> where TDocument : IDocument
+public abstract class GenericRepository<TDocument>(IMongoCollection<TDocument> collection) : IGenericRepository<TDocument> where TDocument : IDocument
 {
-    protected IMongoCollection<TDocument> Collection { get; private set; }
-
-    public GenericRepository(IMongoCollection<TDocument> collection)
-    {
-        Collection = collection;
-    }
+    protected IMongoCollection<TDocument> Collection { get; private set; } = collection;
 
     public IQueryable<TDocument> GetCollectionAsQueryable()
     {

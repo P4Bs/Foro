@@ -5,11 +5,11 @@ public class ThreadViewModel
     public string ThreadId { get; set; }
     public string ThreadName { get; set; }
     public bool IsClosed { get; set; }
-    public IEnumerable<PostData> Posts { get; set; }
     public int TotalPosts { get; set; }
-    public int TotalPostsPerPage { get; set; }
+    public int PostsPerPage { get; set; }
     public int TotalPages { get; set; }
     public int CurrentPage { get; set; }
+    public IEnumerable<PostData> Posts { get; set; }
 }
 
 public class PostData

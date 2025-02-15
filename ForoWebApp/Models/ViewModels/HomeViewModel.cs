@@ -1,8 +1,8 @@
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Models.Domain;
 
 namespace ForoWebApp.Models.ViewModels;
 
-public class HomeViewModel(IList<Theme> themes)
+public class HomeViewModel(IEnumerable<Theme> themes)
 {
-    public IList<Theme> Themes { get; set; } = themes;
+    public IEnumerable<Theme> Themes { get; set; } = themes;
 }

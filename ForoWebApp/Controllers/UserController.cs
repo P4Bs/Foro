@@ -1,32 +1,31 @@
-using ForoWebApp.Builders;
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Controllers.Base;
+using ForoWebApp.Features.Users.LogUser;
+using ForoWebApp.Features.Users.RegisterUser;
+using ForoWebApp.Helpers.UserClaims;
 using ForoWebApp.Managers;
-using ForoWebApp.Models.Requests;
-using ForoWebApp.Models.Results;
-using ForoWebApp.Services;
-using ForoWebApp.Validators;
+using ForoWebApp.Models.ViewModels;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class UserController(ILogger<UserController> logger, UserService userService, CredentialsManager credentialsManager) : Controller
+public class UserController(IMediator mediator, CredentialsManager credentialsManager) : BaseController
 {
-    private readonly ILogger<UserController> _logger = logger;
-    private readonly UserService _userService = userService;
+    private readonly IMediator _mediator = mediator;
     private readonly CredentialsManager _credentialsManager = credentialsManager;
 
     [HttpGet("[action]")]
     public IActionResult Login()
     {
-        if (User.Identity.IsAuthenticated)
+        if (!User.Identity.IsAuthenticated)
         {
-            return Redirect("/");
+            return View();
         }
-        return View();
+        return NoContent();
     }
 
     [HttpGet("[action]")]
@@ -34,94 +33,92 @@ public class UserController(ILogger<UserController> logger, UserService userServ
     {
         if (User.Identity.IsAuthenticated)
         {
-            return Redirect("/");
+            return RedirectToAction("Index", "Home");
         }
         return View();
     }
 
-    [HttpPost("RegisterUser")]
-    public async Task<IActionResult> RegisterUser([FromForm] RegisterUserRequest request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View("Register", request);
-        }
-
-        // PASSWORD VALIDATION
-        var passwordErrors = PasswordValidator.ValidatePassword(request.Password, request.RepeatedPassword);
-
-        if (passwordErrors.Any())
-        {
-            foreach (var error in passwordErrors)
-            {
-                ModelState.AddModelError("Password", error);
-            }
-            return View("Register", request);
-        }
-
-        RegistrationResult result = await _userService.RegisterUser(request);
-
-        if (!result.Success)
-        {
-            _logger.LogError("No se pudo registrar al usuario");
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("Email", error);
-            }
-            return View("Register", request);
-        }
-
-        (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
-
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
-
-        return Redirect("/");
-    }
-
-    [HttpPost("LogUser")]
-    public async Task<IActionResult> LogUser([FromForm] UserLoginRequest request)
-    {
-        if (!ModelState.IsValid)
-        {
-            return View("Login", request);
-        }
-
-        LoginResult result = await _userService.LogUser(request);
-
-        if (!result.Success)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("Email", error);
-            }
-            return View("Login", request);
-        }
-
-        (ClaimsPrincipal userClaimsPrincipal, AuthenticationProperties userAuthenticationProperties) = GenerateUserClaimsAndProperties(result.User);
-
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userClaimsPrincipal, userAuthenticationProperties);
-
-        return Redirect("/");
-    }
-
-    [HttpPost("Logout")]
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        return Redirect("/");
+        return RedirectToAction("Index", "Home");
     }
 
-    private (ClaimsPrincipal, AuthenticationProperties) GenerateUserClaimsAndProperties(User user)
+    [HttpPost("registerUser")]
+    public async Task<IActionResult> RegisterUser([FromForm] RegisterViewModel viewModel)
     {
-        List<Claim> userClaims = TokenBuilder.GenerateUserClaims(user, _credentialsManager.SigningCredentials);
+        if (!ModelState.IsValid)
+        {
+            return View("Register", viewModel);
+        }
 
-        var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var authenticationProperties = new AuthenticationProperties
+        var request = new RegisterRequest
+        {
+            Username = viewModel.Username,
+            Email = viewModel.Email,
+            Password = viewModel.Password,
+            ConfirmPassword = viewModel.ConfirmPassword
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (!response.Success)
+        {
+            foreach (var validation in response.FieldValidations)
+            {
+                ModelState.AddModelError(validation.FieldName, validation.ValidationMessage);
+            }
+            return View("Register", viewModel);
+        }
+
+        var principalClaims = IdentityClaimsHelper.GetClaimsIdentity(
+            model: response.User,
+            signingCredentials: _credentialsManager.SigningCredentials
+        );
+        var persistSession = new AuthenticationProperties
         {
             IsPersistent = true
         };
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principalClaims, persistSession);
+        return RedirectToAction("Index", "Home");
+    }
 
-        return (new ClaimsPrincipal(claimsIdentity), authenticationProperties);
+    [HttpPost("logUser")]
+    public async Task<IActionResult> LogUser([FromForm] LoginViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Login", viewModel);
+        }
+
+        var request = new LogInRequest
+        {
+            Email = viewModel.Email,
+            Password = viewModel.Password
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (!response.Success)
+        {
+            foreach (var validation in response.FieldValidations)
+            {
+                ModelState.AddModelError(validation.FieldName, validation.ValidationMessage);
+            }
+            return View("Login", viewModel);
+        }
+
+        var principalClaims = IdentityClaimsHelper.GetClaimsIdentity(
+            model: response.User,
+            signingCredentials: _credentialsManager.SigningCredentials
+        );
+        var persistSession = new AuthenticationProperties
+        {
+            IsPersistent = true
+        };
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principalClaims, persistSession);
+        return RedirectToAction("Index", "Home");
     }
 }

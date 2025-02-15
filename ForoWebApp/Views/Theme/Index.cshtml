@@ -31,7 +31,7 @@
                     <div class="thread-metadata">
                         <a style="text-decoration: none" asp-controller="Thread" asp-action="Index" asp-route-id="@thread.Id">
                             <span class="thread-metadata-text">
-                                Actualizado @DateFormatHelper.FormatDate(thread.LastUpdatedAt)
+                                Actualizado por @@@thread.LastUpdateByUser @DateFormatHelper.FormatDate(thread.LastUpdatedAt)
                             </span>
                         </a>
                     </div>

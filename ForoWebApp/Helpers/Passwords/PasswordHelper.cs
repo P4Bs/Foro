@@ -1,4 +1,4 @@
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace ForoWebApp.Helpers.Passwords;

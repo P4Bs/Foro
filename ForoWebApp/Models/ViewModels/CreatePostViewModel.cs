@@ -1,7 +1,7 @@
 using ForoWebApp.Helpers.Message;
 using System.ComponentModel.DataAnnotations;
 
-namespace ForoWebApp.Models.Requests;
+namespace ForoWebApp.Models.ViewModels;
 
 public class CreatePostViewModel
 {

@@ -1,29 +1,31 @@
+using ForoWebApp.Controllers.Base;
+using ForoWebApp.Features.Themes.GetTheme;
 using ForoWebApp.Models.ViewModels;
-using ForoWebApp.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class ThemeController(ILogger<ThemeController> logger, ThemeService themeService) : Controller
+public class ThemeController(IMediator mediator) : BaseController
 {
-    private readonly ILogger<ThemeController> _logger = logger;
-    private readonly ThemeService _themeService = themeService;
+    private readonly IMediator _mediator = mediator;
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Index(string id)
     {
-        ThemeViewModel theme;
-        try
+        var request = new GetThemeRequest
         {
-            theme = await _themeService.GetThemeThreads(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error al obtener el hilo con id = {id}: {exceptionMessage}", id, ex.Message);
-            throw;
-        }
+            ThemeId = id
+        };
 
-        return View(theme);
+        var response = await _mediator.Send(request);
+
+        if (response.Success)
+        {
+            return View(response.Theme);
+        }
+        
+        return View(new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }

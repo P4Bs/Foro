@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ForoWebApp.Views.Themes
+namespace ForoWebApp.Views.Theme;
+
+public class GetThemeModel : PageModel
 {
-    public class GetThemeModel : PageModel
+    public void OnGet()
     {
-        public void OnGet()
-        {
-        }
     }
 }
