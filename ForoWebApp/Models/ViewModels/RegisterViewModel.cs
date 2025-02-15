@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ForoWebApp.Models.Requests;
+namespace ForoWebApp.Models.ViewModels;
 
-public class RegisterUserRequest
+public class RegisterViewModel
 {
     [StringLength(30, MinimumLength = 4, ErrorMessage = "El nombre de usuario ha de tener un mínimo de 4 y máximo de 30 carácteres")]
     [Required(ErrorMessage = "El campo de nombre de usuario es obligatorio")]
@@ -16,5 +16,5 @@ public class RegisterUserRequest
     public string Password { get; set; }
 
     [Required(ErrorMessage = "El campo de contraseña es obligatorio")]
-    public string RepeatedPassword { get; set; }
+    public string ConfirmPassword { get; set; }
 }

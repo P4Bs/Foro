@@ -15,7 +15,7 @@
     {
         if(User.Identity.IsAuthenticated){
             var userRole = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
-            return userRole?.Value == UserRole.ADMIN;
+            return userRole?.Value == UserConstants.AdminRole;
         }
         return false;
     }

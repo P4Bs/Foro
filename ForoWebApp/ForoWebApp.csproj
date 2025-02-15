@@ -14,9 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\User\" />
-    <Folder Include="Features\Thread\" />
-    <Folder Include="Features\Theme\" />
     <Folder Include="wwwroot\img\carros\" />
   </ItemGroup>
 

@@ -1,8 +1,8 @@
+using ForoWebApp.Features.Common;
+
 namespace ForoWebApp.Features.Posts.PublishPost;
 
-public class PublishPostResponse
+public class PublishPostResponse(bool success, string[]? errors = null) : BaseResponse(success, errors)
 {
-    public bool Success { get; set; }
-    public string? Message { get; set; }
     public string? ThreadId { get; set; }
 }

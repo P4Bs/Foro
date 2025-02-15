@@ -1,17 +1,15 @@
+using ForoWebApp.Controllers.Base;
 using ForoWebApp.Features.Posts.PublishPost;
-using ForoWebApp.Models.Requests;
 using ForoWebApp.Models.ViewModels;
-using ForoWebApp.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class PostController(IMediator mediator) : Controller
+public class PostController(IMediator mediator) : BaseController
 {
     private readonly IMediator _mediator = mediator;
 
@@ -39,7 +37,7 @@ public class PostController(IMediator mediator) : Controller
         {
             return Redirect($"/thread/{threadId}");
         }
-        return View("Error",
-            new ErrorViewModel(requestId: Activity.Current?.Id ?? HttpContext.TraceIdentifier, errorMessage: response.Message));
+        return View(new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }
+

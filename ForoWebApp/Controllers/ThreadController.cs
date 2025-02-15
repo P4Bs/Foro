@@ -1,7 +1,9 @@
-using ForoWebApp.Database.Constants;
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Controllers.Base;
+using ForoWebApp.Features.Threads.CloseThread;
+using ForoWebApp.Features.Threads.CreateThread;
+using ForoWebApp.Features.Threads.GetThread;
 using ForoWebApp.Models.ViewModels;
-using ForoWebApp.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,18 +11,29 @@ using System.Security.Claims;
 namespace ForoWebApp.Controllers;
 
 [Route("[controller]")]
-public class ThreadController(ILogger<ThreadController> logger, ThreadService threadService, PostService postService) : Controller
+public class ThreadController(IMediator mediator, ILogger<ThreadController> logger) : BaseController
 {
+    private readonly IMediator _mediator = mediator;
     private readonly ILogger<ThreadController> _logger = logger;
-    private readonly ThreadService _threadService = threadService;
-    private readonly PostService _postService = postService;
 
     [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> Index(string id, [FromQuery] int? pageNumber)
     {
-        ThreadViewModel threadViewModel = await _threadService.GetThreadPosts(id, pageNumber);
-        return View(threadViewModel);
+        var request = new GetThreadRequest
+        {
+            ThreadId = id,
+            PageNumber = pageNumber
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (response.Success)
+        {
+            return View(response.ThreadViewModel);
+        }
+
+        return View(new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
@@ -37,6 +50,7 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
     {
         if(!ModelState.IsValid || themeId is null)
         {
+            _logger.LogError("No se pudo obtener el id del usuario logado");
             return View("NewThread", threadViewModel);
         }
 
@@ -47,68 +61,40 @@ public class ThreadController(ILogger<ThreadController> logger, ThreadService th
             return Unauthorized();
         }
 
-        ForumThread newThread = new()
+        var request = new CreateThreadRequest
         {
             ThemeId = themeId,
-            Title = threadViewModel.Title,
-            CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(Constants.CentralEuropeanTimezoneID)),
-            IsClosed = false,
-            ClosureDate = null
-        };
-
-        string threadId;
-
-        try
-        {
-            threadId = await _threadService.PublishThread(newThread);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Se capturo una excepción al crear el hilo: {exceptionMessage}", ex.Message);
-            throw;
-        }
-
-        Post newPost = new()
-        {
-            ThreadId = threadId,
             UserId = userId,
-            Content = threadViewModel.MessageContent,
-            PostDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById(Constants.CentralEuropeanTimezoneID))
+            Title = threadViewModel.Title,
+            PostContent = threadViewModel.MessageContent
         };
 
-        string postId;
-        try
+        var response = await _mediator.Send(request);
+
+        if(response.Success)
         {
-            postId = await _postService.PublishPost(newPost);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Se capturo una excepción al publicar el primer mensaje: {exceptionMessage}", ex.Message);
-            throw;
+            return Redirect($"/thread/{response.ThreadId}");
         }
 
-        return Redirect($"/thread/{threadId}");
+        return View(new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
     [HttpPost("close/{threadId}")]
     public async Task<IActionResult> CloseThread(string threadId)
     {
-        bool success;
-        try
+        var request = new CloseThreadRequest
         {
-            success = await _threadService.CloseThread(threadId);
-        }
-        catch (Exception ex)
+            ThreadId = threadId
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (response.Success)
         {
-            _logger.LogError("Se capturo una excepción al cerrar el hilo: {exceptionMessage}", ex.Message);
-            throw;
+            return StatusCode(205, $"Se ha cerrado correctamente el hilo con id = {threadId}");
         }
 
-        if (success)
-        {
-            return StatusCode(205, "El hilo se ha cerrado correctamente");
-        }
-        return StatusCode(205, "Ocurrio un error al intentar cerrar el hilo");
+        return View(new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }

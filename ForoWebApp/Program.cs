@@ -1,7 +1,7 @@
 using ForoWebApp.Database;
-using ForoWebApp.Database.Documents;
 using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Managers;
+using ForoWebApp.Models.Domain;
 using ForoWebApp.Models.Settings;
 using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;

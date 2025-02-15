@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ForoWebApp.Models.Requests;
+namespace ForoWebApp.Models.ViewModels;
 
-public record class UserLoginRequest
+public record class LoginViewModel
 {
     [Required(ErrorMessage = "El campo de correo electrónico es obligatorio")]
     public string Email { get; set; }

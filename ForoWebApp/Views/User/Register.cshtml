@@ -1,4 +1,4 @@
-﻿@model RegisterUserRequest
+@model RegisterViewModel
 
 <div style="display: flex; justify-content: center; align-items: center; min-height: 50vh; padding: 16px; box-sizing: border-box;" id="page-container">
     <div style="width: 100%; max-width: 400px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 8px" id="container">
@@ -23,9 +23,9 @@
             <input asp-for="Password" type="password" id="Password" name="Password" placeholder="Contraseña" style="padding: 8px; font-size: 16px; margin-bottom: 4px;" />
             <span asp-validation-for="Password" style="color: red; font-size: 14px;"></span>
 
-            <label asp-for="RepeatedPassword" style="font-weight: bold; margin-top: 16px; margin-bottom: 8px;">Repetir contraseña</label>
-            <input asp-for="RepeatedPassword" type="password" id="RepeatedPassword" name="RepeatedPassword" placeholder="Contraseña" style="padding: 8px; font-size: 16px; margin-bottom: 4px;" />
-            <span asp-validation-for="RepeatedPassword" style="color: red; font-size: 14px;"></span>
+            <label asp-for="ConfirmPassword" style="font-weight: bold; margin-top: 16px; margin-bottom: 8px;">Repetir contraseña</label>
+            <input asp-for="ConfirmPassword" type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Contraseña" style="padding: 8px; font-size: 16px; margin-bottom: 4px;" />
+            <span asp-validation-for="ConfirmPassword" style="color: red; font-size: 14px;"></span>
 
             <div style="display: flex; justify-content: center; align-items: center; height: 100px;">
                 <input type="submit" value="Registrarse" style="padding: 15px; font-size: 16px; background-color: #FD5D4D; color: white; border: none; border-radius: 4px; cursor: pointer;" />

@@ -1,4 +1,4 @@
-using ForoWebApp.Database.Documents;
+using ForoWebApp.Models.Domain;
 
 namespace ForoWebApp.Helpers.Passwords;
 

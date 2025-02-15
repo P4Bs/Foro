@@ -2,7 +2,7 @@
     ViewData["Title"] = "Forocarros";
 }
 @functions{
-    string getUsername(){
+    string GetUsername(){
         var claim =  User.Claims.Where(claim => claim.Type == ClaimTypes.Name).FirstOrDefault();
         return claim.Value;
     }
@@ -33,7 +33,10 @@
                         @if(User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span>Hola @@@getUsername()</span>
+                                <a class="text-dark" style="text-decoration: none; margin-right: 20px;">Hola @@@GetUsername()</a>
+                                <button alt="Cerrar Sesión" onclick="location.href='@Url.Action("Logout", "User")'">
+                                    Cerrar Sesión
+                                </button>
                             </li>
                         }
                         else
