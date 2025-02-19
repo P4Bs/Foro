@@ -17,7 +17,7 @@
     {
         if(User.Identity.IsAuthenticated){
             var userRole = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
-            return userRole?.Value == UserConstants.AdminRole;
+            return userRole?.Value.ToLowerInvariant() == UserConstants.AdminRole.ToLowerInvariant();
         }
         return false;
     }
@@ -38,9 +38,11 @@
             }
             @if(IsUserAdmin() && !Model.IsClosed)
             {
-                <button class="rounded-button" alt="Cerrar hilo" onclick="location.href='@Url.Action("CloseThread", "Thread", new { threadId = Model.ThreadId })'">
-                    <span class="inner-buttom-text">Cerrar hilo</span>
-                </button>
+                <form method="post" asp-controller="Thread" asp-action="CloseThread" asp-route-threadId="@Model.ThreadId">
+                    <button type="submit" class="rounded-button close-thread-button" alt="Cerrar hilo">
+                        <span class="inner-buttom-text">Cerrar hilo</span>
+                    </button>
+                </form>
             }
         </div>
     </section>

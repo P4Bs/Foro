@@ -26,6 +26,6 @@ public class ThemeController(IMediator mediator) : BaseController
             return View(response.Theme);
         }
         
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }
