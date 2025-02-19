@@ -1,8 +1,9 @@
 @model ThemeViewModel
 @{
     ViewData["Title"] = "Theme";
+    int lowerBound = PaginationUtilities.CalculateLowerBoundPage(Model.CurrentPage);
+    int upperBound = PaginationUtilities.CalculateUpperBoundPage(Model.CurrentPage, Model.TotalPages);
 }
-
 <div id="theme-container">
     <section id="theme-header">
         <div class="header-flex-container">
@@ -12,11 +13,66 @@
             </button>
         </div>
     </section>
-
-@*     <div class="thread-section-container">
-        <h1 class="black-ribbon-title">Hilos</h1>
-    </div> *@
-
+    @if (Model.TotalPages > 1)
+    {
+        <section class="pagenav-ribbon">
+            @if (Model.CurrentPage > 1)
+            {
+                <a href="@Url.Action("Index", "Theme", new { id = Model.ThemeId, page = 1 })">
+                    <span class="first-page-enabled">@PaginationUtilities.GetPageNumberForBound(1, lowerBound)</span>
+                </a>
+            }
+            else
+            {
+                <span class="first-page-disabled"></span>
+            }
+            <div class="pagenav-middle-section">
+                @if (Model.CurrentPage == 1)
+                {
+                    <span class="pagenav-left-disabled"></span>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Theme", new { id = Model.ThemeId, page = Model.CurrentPage - 1 })">
+                        <span class="pagenav-left-enabled"></span>
+                    </a>
+                }
+                <div class="pagenav-number-row">
+                    @for (int pageNumber = lowerBound; pageNumber <= upperBound; pageNumber++)
+                    {
+                        if (pageNumber == Model.CurrentPage)
+                        {
+                            <span class="current-page">@pageNumber</span>
+                        }
+                        else
+                        {
+                            <a class="other-pages" href="@Url.Action("Index", "Theme", new { id = Model.ThemeId, page = pageNumber })">@pageNumber</a>
+                        }
+                    }
+                </div>
+                @if (Model.CurrentPage == Model.TotalPages)
+                {
+                    <span class="pagenav-right-disabled"></span>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Theme", new { id = Model.ThemeId, page = Model.CurrentPage + 1 })">
+                        <span class="pagenav-right-enabled"></span>
+                    </a>
+                }
+            </div>
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <a href="@Url.Action("Index", "Theme", new { id = Model.ThemeId, page = Model.TotalPages })">
+                    <span class="last-page-enabled">@PaginationUtilities.GetPageNumberForBound(upperBound, Model.TotalPages)</span>
+                </a>
+            }
+            else
+            {
+                <span class="last-page-disabled"></span>
+            }
+        </section>
+    }
     <section>
         @foreach (var thread in Model.Threads)
         {

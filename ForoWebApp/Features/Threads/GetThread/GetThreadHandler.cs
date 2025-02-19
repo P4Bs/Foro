@@ -15,7 +15,7 @@ public class GetThreadHandler(ILogger<GetThreadHandler> logger, ThreadService th
 
         try
         {
-            threadViewModel = await _threadService.GetThreadPosts(request.ThreadId, request.PageNumber);
+            threadViewModel = await _threadService.GetThreadPosts(request.ThreadId, request.Page);
         }
         catch(Exception ex)
         {

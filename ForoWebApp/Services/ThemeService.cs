@@ -61,7 +61,11 @@ public class ThemeService(UnitOfWork unitOfWork)
         {
             ThemeId = themeData.Id,
             ThemeTitle = themeData.Name,
-            Threads = threadsList
+            Threads = threadsList,
+            TotalThreads = totalThreads,
+            ThreadsPerPage = itemsPerPage,
+            TotalPages = totalPages,
+            CurrentPage = requestedPage
         };
     }
 }
