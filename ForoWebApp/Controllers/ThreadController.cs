@@ -33,7 +33,7 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
             return View(response.ThreadViewModel);
         }
 
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
@@ -42,6 +42,30 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
     {
         ViewData["ThemeId"] = themeId;
         return View();
+    }
+
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> CloseThread([FromQuery] string threadId)
+    {
+        if (threadId == null)
+        {
+            _logger.LogError("No se pudo obtener el id del hilo");
+            return View("Error", new ErrorViewModel(GetRequestId(), ["No se pudo obtener el id del hilo"]));
+        }
+            var request = new CloseThreadRequest
+        {
+            ThreadId = threadId
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (response.Success)
+        {
+            return RedirectToAction("Index", "Thread", new { id = threadId });
+        }
+
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
@@ -76,25 +100,6 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
             return Redirect($"/thread/{response.ThreadId}");
         }
 
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
-    }
-
-    [Authorize]
-    [HttpPost("close/{threadId}")]
-    public async Task<IActionResult> CloseThread(string threadId)
-    {
-        var request = new CloseThreadRequest
-        {
-            ThreadId = threadId
-        };
-
-        var response = await _mediator.Send(request);
-
-        if (response.Success)
-        {
-            return StatusCode(205, $"Se ha cerrado correctamente el hilo con id = {threadId}");
-        }
-
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }

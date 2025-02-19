@@ -37,7 +37,7 @@ public class PostController(IMediator mediator) : BaseController
         {
             return Redirect($"/thread/{threadId}");
         }
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }
 

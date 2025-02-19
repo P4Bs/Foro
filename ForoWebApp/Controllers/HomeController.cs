@@ -19,6 +19,6 @@ public class HomeController(IMediator mediator) : BaseController
             return View(new HomeViewModel(response.Themes));
         }
 
-        return View(new ErrorViewModel(GetRequestId(), response.Errors));
+        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }

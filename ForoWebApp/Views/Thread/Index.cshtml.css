@@ -59,6 +59,11 @@
     text-decoration: none; /* Remove underline from text links */
 }
 
+.close-thread-button {
+    background-color: red;
+    color: black;
+}
+
 /* Button text styles */
 .inner-buttom-text {
     font-weight: bold;
