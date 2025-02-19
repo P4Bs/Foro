@@ -64,6 +64,123 @@
     font-weight: bold;
 }
 
+.pagenav-ribbon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 18px 0;
+    gap: 6px;
+}
+
+.first-page-enabled {
+    background-image: url('../img/navbar/final-left.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+}
+
+.first-page-disabled {
+    background-image: url('../img/navbar/final-left-disable.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+}
+
+.pagenav-middle-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.pagenav-left-enabled {
+    background-image: url('../img/navbar/next-left.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+    margin-right: 12px;
+    margin-top: 3px;
+}
+
+.pagenav-left-disabled {
+    background-image: url('../img/navbar/next-left-disable.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+    margin-right: 12px;
+    margin-top: 3px;
+}
+
+.pagenav-number-row {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+}
+
+.current-page {
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0 7px;
+    margin: 0 2px;
+}
+
+.other-pages {
+    color: #FD5D4D;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0 7px;
+    margin: 0 2px;
+}
+
+.pagenav-right-enabled {
+    background-image: url('../img/navbar/next-right.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+    margin-left: 12px;
+    margin-top: 3px;
+}
+
+.pagenav-right-disabled {
+    background-image: url('../img/navbar/next-right-disable.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+    margin-left: 12px;
+    margin-top: 3px;
+}
+
+.last-page-enabled {
+    background-image: url('../img/navbar/final-right.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+}
+
+.last-page-disabled {
+    background-image: url('../img/navbar/final-right-disable.svg');
+    display: flex;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 17px;
+    background-size: 100%;
+}
+
 .post-box {
     padding: 5px 10px 5px 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

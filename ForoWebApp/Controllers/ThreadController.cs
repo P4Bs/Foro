@@ -18,12 +18,12 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Index(string id, [FromQuery] int? pageNumber)
+    public async Task<IActionResult> Index([FromRoute] string id, int? page)
     {
         var request = new GetThreadRequest
         {
             ThreadId = id,
-            PageNumber = pageNumber
+            Page = page
         };
 
         var response = await _mediator.Send(request);
