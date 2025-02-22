@@ -1,6 +1,5 @@
 using ForoWebApp.Database.Documents;
 using ForoWebApp.Models.Settings;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace ForoWebApp.Database;
@@ -18,10 +17,10 @@ public class DbContext
     public IMongoCollection<ForumThread> Threads => _threads ??= GetCollection<ForumThread>("thread");
     public IMongoCollection<User> Users => _users ??= GetCollection<User>("user");
 
-    public DbContext(IOptionsMonitor<DbSettings> options)
+    public DbContext(DatabaseConfiguration dbConfig)
     {
-        var client = new MongoClient(options.CurrentValue.ConnectionString);
-        _database = client.GetDatabase(options.CurrentValue.DatabaseName);
+        var client = new MongoClient(dbConfig.ConnectionString);
+        _database = client.GetDatabase(dbConfig.DatabaseName);
     }
 
     protected IMongoCollection<T> GetCollection<T>(string collectionName)

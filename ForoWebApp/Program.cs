@@ -1,3 +1,4 @@
+using ForoWebApp;
 using ForoWebApp.Database;
 using ForoWebApp.Helpers.Passwords;
 using ForoWebApp.Managers;
@@ -10,14 +11,21 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
+#region Load Environment Variables
+var rootDirectory = Directory.GetCurrentDirectory();
+var dotEnvFilePath = Path.Combine(rootDirectory, ".env");
+DotEnvironment.LoadVariablesFromFileDescriptor(dotEnvFilePath);
+#endregion
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuration
+#region Add Configuration
 builder.Configuration.Sources.Clear();
 builder.Configuration
     .AddJsonFile("appsettings.json")
     .AddJsonFile("appsettings.Development.json", optional: false)
     .AddUserSecrets(Assembly.GetEntryAssembly());
+#endregion
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -28,12 +36,11 @@ builder.Services.Configure<RouteOptions>(options =>
 });
 
 #region Mongo Database Configuration
-var dbSettings = new DbSettings(connectionString: Environment.GetEnvironmentVariable("DB__PROD__CONNECTION__STRING"), "ForoDB");
-builder.Services.Configure<DbSettings>(configureOptions =>
-{
-    configureOptions.ConnectionString = dbSettings.ConnectionString;
-    configureOptions.DatabaseName = dbSettings.DatabaseName;
-});
+var dbConfig = new DatabaseConfiguration(
+    Environment.GetEnvironmentVariable("DB__CONNECTION__STRING"),
+    Environment.GetEnvironmentVariable("DB__NAME")
+);
+builder.Services.AddSingleton(dbConfig);
 builder.Services.AddScoped<DbContext>();
 builder.Services.AddScoped<UnitOfWork>();
 #endregion
@@ -52,7 +59,7 @@ builder.Services.AddSingleton<IPasswordHelper, PasswordHelper>();
 #endregion
 
 #region Authentication
-var signingKey = Environment.GetEnvironmentVariable("SIGNING_KEY");
+var signingKey = Environment.GetEnvironmentVariable("SECRET__KEY");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddCookie(options =>
 {
