@@ -7,9 +7,17 @@ using ForoWebApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuration
+builder.Configuration.Sources.Clear();
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.Development.json", optional: false)
+    .AddUserSecrets(Assembly.GetEntryAssembly());
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,7 +28,12 @@ builder.Services.Configure<RouteOptions>(options =>
 });
 
 #region Mongo Database Configuration
-builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDB"));
+var dbSettings = new DbSettings(connectionString: Environment.GetEnvironmentVariable("DB__PROD__CONNECTION__STRING"), "ForoDB");
+builder.Services.Configure<DbSettings>(configureOptions =>
+{
+    configureOptions.ConnectionString = dbSettings.ConnectionString;
+    configureOptions.DatabaseName = dbSettings.DatabaseName;
+});
 builder.Services.AddScoped<DbContext>();
 builder.Services.AddScoped<UnitOfWork>();
 #endregion
@@ -39,6 +52,7 @@ builder.Services.AddSingleton<IPasswordHelper, PasswordHelper>();
 #endregion
 
 #region Authentication
+var signingKey = Environment.GetEnvironmentVariable("SIGNING_KEY");
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddCookie(options =>
 {
@@ -56,7 +70,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("Secret").Value)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey)),
     };
 });
 #endregion
