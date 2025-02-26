@@ -3,8 +3,8 @@ using System.Text;
 
 namespace ForoWebApp.Managers;
 
-public class CredentialsManager(IConfiguration configuration)
+public class CredentialsManager
 {
     private SigningCredentials _signingCredentials;
-    public SigningCredentials SigningCredentials => _signingCredentials ??= new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Secret").Value)), SecurityAlgorithms.HmacSha512);
+    public SigningCredentials SigningCredentials => _signingCredentials ??= new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET__KEY"))), SecurityAlgorithms.HmacSha256);
 }
