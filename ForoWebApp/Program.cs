@@ -11,12 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
-#region Load Environment Variables
-var rootDirectory = Directory.GetCurrentDirectory();
-var dotEnvFilePath = Path.Combine(rootDirectory, ".env");
-DotEnvironment.LoadVariablesFromFileDescriptor(dotEnvFilePath);
-#endregion
-
 var builder = WebApplication.CreateBuilder(args);
 
 #region Add Configuration

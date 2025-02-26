@@ -14,9 +14,9 @@ public partial class PasswordValidator
         {
             yield return "La contraseña no puede estar vacía";
         }
-        if (password.Length < 12)
+        if (password.Length < 6)
         {
-            yield return "La contraseña debe tener al menos 12 caracteres";
+            yield return "La contraseña debe tener al menos 6 caracteres";
         }
         if (!password.Any(char.IsDigit))
         {
