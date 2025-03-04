@@ -103,4 +103,3 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
         return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }
-
