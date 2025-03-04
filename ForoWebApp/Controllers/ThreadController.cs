@@ -44,7 +44,7 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
         return View();
     }
 
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CloseThread([FromQuery] string threadId)
     {
@@ -103,3 +103,4 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
         return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 }
+
