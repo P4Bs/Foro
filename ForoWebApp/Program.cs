@@ -1,4 +1,3 @@
-using ForoWebApp;
 using ForoWebApp.Constants;
 using ForoWebApp.Database;
 using ForoWebApp.Helpers.Passwords;
@@ -103,9 +102,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

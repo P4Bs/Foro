@@ -30,10 +30,10 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
 
         if (response.Success)
         {
-            return View(response.ThreadViewModel);
+            return View(model: response.ThreadViewModel);
         }
 
-        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
+        return View(viewName: "Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
@@ -65,7 +65,7 @@ public class ThreadController(IMediator mediator, ILogger<ThreadController> logg
             return RedirectToAction("Index", "Thread", new { id = threadId });
         }
 
-        return View("Error", new ErrorViewModel(GetRequestId(), response.Errors));
+        return View(viewName: "Error", new ErrorViewModel(GetRequestId(), response.Errors));
     }
 
     [Authorize]
